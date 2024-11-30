@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html
+        lang="en"
+        th:replace="~{base :: parent(~{::#content},~{::title},~{::script})}"
+>
+<head>
+    <title data-th-text="${loggedInUser.name}+' |  SCM'">Profile Page</title>
+</head>
+<body>
+<div id="content">
+    <div th:if="${loggedInUser}">
+        <div data-th-replace="~{user/sidebar :: sidebar}"></div>
+    </div>
+
+    <div class="sm:pl-64 pt-20" style="height: 1000px">
+        <div class="flex items-center justify-center md:pt-32 flex-col">
+            <div class="text-center p-6 bg-white shadow-lg rounded-lg max-w-md w-full">
+                <div class="text-6xl text-red-600 font-bold mb-4">
+                    403
+                </div>
+                <h1 class="text-3xl text-gray-800 font-semibold mb-2">
+                    Forbidden
+                </h1>
+                <p class="text-gray-600 mb-4">
+                    You do not have permission to access this page. Please contact the administrator if you believe this is an error.
+                </p>
+                <a href="/" class="text-blue-500 hover:underline text-lg">Go back to home</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        console.log("this is profile page");
+    </script>
+</body>
+</html>
