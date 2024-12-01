@@ -41,40 +41,177 @@ This document explains how authentication, authorization, and role-based access 
 - **Lombok**
 - **DevTools**
 - **MySQL Connector**
+- **Cloudinary API KEY & CLIENT SECRET**
+  
+---
 
-### Frontend Setup
+---
 
-1. Initialize npm:
+
+# How To Run The Project?
+
+Follow these steps to set up and run the ConnectMate application:
+
+---
+
+## 1. Download the Project
+
+- Clone the project repository or download the source code as a ZIP file.
+- Extract the ZIP file to your desired directory.
+
+---
+
+## 2. Configure the `application.properties` File
+
+### **Database Configuration**
+
+1. **Create a Database**:
+   - Open your MySQL client or command-line interface.
+   - Run the following command to create a database:
+     ```sql
+     CREATE DATABASE connectmatescm;
+     ```
+
+2. **Update Database Credentials**:
+   - Open the `application.properties` file.
+   - Update the following fields with your MySQL credentials:
+     ```properties
+     spring.datasource.username=your_mysql_username
+     spring.datasource.password=your_mysql_password
+     ```
+
+---
+
+### **OAuth2 Configuration**
+
+To enable social login (Google and GitHub), create OAuth2 credentials for both platforms.
+
+#### **Google OAuth2 Configuration**
+1. **Create a Google OAuth2 Application**:
+   - Go to the [Google Cloud Console](https://console.cloud.google.com/).
+   - Create a new project.
+   - Navigate to **APIs & Services > Credentials**.
+   - Click on **Create Credentials** and select **OAuth Client ID**.
+   - Set the application type to **Web Application**.
+   - Add the following redirect URI:
+     ```
+     http://localhost:8080/login/oauth2/code/google
+     ```
+   - Save the credentials and note the **Client ID** and **Client Secret**.
+
+2. **Update Google OAuth2 Configuration**:
+   - Replace placeholders in `application.properties`:
+     ```properties
+     spring.security.oauth2.client.registration.google.client-id=your_google_client_id
+     spring.security.oauth2.client.registration.google.client-secret=your_google_client_secret
+     ```
+
+#### **GitHub OAuth2 Configuration**
+1. **Create a GitHub OAuth2 Application**:
+   - Go to the [GitHub Developer Settings](https://github.com/settings/developers).
+   - Click on **New OAuth App**.
+   - Enter the application details:
+     - **Homepage URL**: `http://localhost:8080`
+     - **Authorization callback URL**: `http://localhost:8080/login/oauth2/code/github`
+   - Save the application and note the **Client ID** and **Client Secret**.
+
+2. **Update GitHub OAuth2 Configuration**:
+   - Replace placeholders in `application.properties`:
+     ```properties
+     spring.security.oauth2.client.registration.github.client-id=your_github_client_id
+     spring.security.oauth2.client.registration.github.client-secret=your_github_client_secret
+     ```
+
+---
+
+### **Cloudinary Configuration**
+
+For image uploads, configure **Cloudinary**:
+
+1. **Create a Cloudinary Account**:
+   - Sign up at [Cloudinary](https://cloudinary.com/).
+   - Navigate to **Dashboard** to get your Cloud Name, API Key, and API Secret.
+
+2. **Update Cloudinary Configuration**:
+   - Replace placeholders in `application.properties`:
+     ```properties
+     cloudinary.cloud.name=your_cloud_name
+     cloudinary.api.key=your_api_key
+     cloudinary.api.secret=your_api_secret
+     ```
+
+---
+
+### **Email Configuration**
+
+To enable email notifications, configure an SMTP email service (e.g., Mailtrap).
+
+1. **Create a Mailtrap Account**:
+   - Sign up at [Mailtrap](https://mailtrap.io/).
+   - Navigate to **Inbox > SMTP Settings** to get your credentials.
+
+2. **Update Email Configuration**:
+   - Replace placeholders in `application.properties`:
+     ```properties
+     spring.mail.host=smtp.mailtrap.io
+     spring.mail.port=2525
+     spring.mail.username=your_mailtrap_username
+     spring.mail.password=your_mailtrap_password
+     spring.mail.properties.domain_name=connectMate@demomailtrap.com
+     ```
+
+---
+
+## 3. Build and Run the Project
+
+1. Open the project in your preferred IDE (e.g., IntelliJ, Eclipse, STS).
+2. Ensure you have Java 11 or higher installed on your system.
+3. Run the project using the IDE or through the terminal:
+   ```bash
+   ./mvnw spring-boot:run
+   ```
+
+---
+
+## 4. Access the Application
+
+- Open a browser and navigate to:
+  ```
+  http://localhost:8080
+  ```
+---
+
+#### Additional Frontend Configuration.
+
+---
+
+#### Frontend Setup (Tailwind CSS)
+1. **Initialize NPM**:
    ```bash
    npm init -y
    npm install -D tailwindcss
    npx tailwindcss init
    ```
 
-2. Add paths in `tailwind.config.js`:
-   ```js
-   content: ["./src/**/*.{html,js}"]
-   ```
+2. **Configure Tailwind**:
+   - Update `tailwind.config.js`:
+     ```js
+     content: ["./src/**/*.{html,js}"]
+     ```
 
-3. Create `input.css` in `src/main/resources/css`:
-   ```css
-   @tailwind base;
-   @tailwind components;
-   @tailwind utilities;
-   ```
+3. **Set Up Tailwind CSS**:
+   - Create an `input.css` file in `src/main/resources/css`:
+     ```css
+     @tailwind base;
+     @tailwind components;
+     @tailwind utilities;
+     ```
 
-4. Run tailwind build:
+4. **Build Tailwind CSS**:
    ```bash
-   npx tailwindcss -i .\src\main\resources\static\css\input.css -o .\src\main\resources\static\css\output.css --watch
+   npx tailwindcss -i ./src/main/resources/static/css/input.css -o ./src/main/resources/static/css/output.css --watch
    ```
-
-5. Add the following CDN to every page:
-   ```html
-   <link href="https://cdn.jsdelivr.net/npm/flowbite@2.5.2/dist/flowbite.min.css" rel="stylesheet" />
-   <script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.2/dist/flowbite.min.js"></script>
-   ```
-
----
+   > **Note**: Keep this command running in the background to monitor CSS changes during development.
 
 ## Authentication and Authorization
 
@@ -89,15 +226,15 @@ Authentication in ConnectMate is handled using **Spring Security** with support 
 
   ```yaml
   spring:
-    security:
-      oauth2:
-        client:
-          registration:
-            google:
-              client-id: YOUR_GOOGLE_CLIENT_ID
-              client-secret: YOUR_GOOGLE_CLIENT_SECRET
-              scope: profile, email
-              redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
+  security:
+  oauth2:
+  client:
+  registration:
+  google:
+  client-id: YOUR_GOOGLE_CLIENT_ID
+  client-secret: YOUR_GOOGLE_CLIENT_SECRET
+  scope: profile, email
+  redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
   ```
 
 #### Authorization
