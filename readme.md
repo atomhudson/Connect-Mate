@@ -95,7 +95,7 @@ To enable social login (Google and GitHub), create OAuth2 credentials for both p
    - Set the application type to **Web Application**.
    - Add the following redirect URI:
      ```
-     http://localhost:8080/login/oauth2/code/google
+     http://localhost:8081/login/oauth2/code/google
      ```
    - Save the credentials and note the **Client ID** and **Client Secret**.
 
@@ -111,8 +111,8 @@ To enable social login (Google and GitHub), create OAuth2 credentials for both p
    - Go to the [GitHub Developer Settings](https://github.com/settings/developers).
    - Click on **New OAuth App**.
    - Enter the application details:
-     - **Homepage URL**: `http://localhost:8080`
-     - **Authorization callback URL**: `http://localhost:8080/login/oauth2/code/github`
+     - **Homepage URL**: `http://localhost:8081`
+     - **Authorization callback URL**: `http://localhost:8081/login/oauth2/code/github`
    - Save the application and note the **Client ID** and **Client Secret**.
 
 2. **Update GitHub OAuth2 Configuration**:
@@ -177,7 +177,7 @@ To enable email notifications, configure an SMTP email service (e.g., Mailtrap).
 
 - Open a browser and navigate to:
   ```
-  http://localhost:8080
+  http://localhost:8081
   ```
 ---
 
@@ -267,22 +267,36 @@ Roles are defined as follows:
 URL patterns are configured to restrict access to certain pages based on roles. For instance:
 
 ```java
-@Override
-protected void configure(HttpSecurity http) throws Exception {
-    http
-        .authorizeRequests()
-        .antMatchers("/admin/**").hasRole("ADMIN")
-        .antMatchers("/user/**").hasRole("USER")
-        .antMatchers("/", "/login", "/signup").permitAll()
-        .anyRequest().authenticated()
-        .and()
-        .formLogin()
-        .loginPage("/login")
-        .permitAll()
-        .and()
-        .logout()
-        .permitAll();
-}
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
+        httpSecurity.authorizeHttpRequests(authorize -> {
+            // authorization rules
+            authorize.requestMatchers("admin/**").hasRole("ADMIN");
+            authorize.requestMatchers("user/**").permitAll();
+            authorize.requestMatchers("/user/**").authenticated();
+            authorize.anyRequest().permitAll();
+        });
+        httpSecurity.formLogin(formLogin -> {
+            formLogin.loginPage("/login");
+            formLogin.loginProcessingUrl("/authenticate");
+            formLogin.successForwardUrl("/user/profile");
+            formLogin.usernameParameter("email");
+            formLogin.passwordParameter("password");
+            formLogin.failureHandler(authenticationFailureHandler);
+        });
+        httpSecurity.csrf(AbstractHttpConfigurer::disable);
+
+        httpSecurity.oauth2Login(oauth -> {
+            oauth.loginPage("/login");
+            oauth.successHandler(handler);
+        });
+
+        httpSecurity.logout(logoutForm -> {
+            logoutForm.logoutUrl("/do-logout");
+            logoutForm.logoutSuccessUrl("/login?logout=true");
+        });
+        return httpSecurity.build();
+    }
 ```
 
 In this configuration:
