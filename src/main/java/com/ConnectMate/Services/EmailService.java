@@ -4,7 +4,7 @@ public interface EmailService {
 
     void sendEmail(String to, String subject, String body);
 
-    void sendEmailWithHtml();
+    void sendEmail(String[] to, String subject, String body);
 
-    void sendEmailWithAttachment();
+    void sendEmailWithHTML(String[] to, String subject, String body);
 }

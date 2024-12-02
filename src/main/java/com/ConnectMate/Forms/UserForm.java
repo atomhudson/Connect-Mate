@@ -18,6 +18,8 @@ import lombok.ToString;
 @ToString
 public class UserForm {
 
+    private String userType;
+
     @NotBlank(message = "Username is required")
     @Size(min = 3, message = "Min 3 Characters is required")
     private String name;

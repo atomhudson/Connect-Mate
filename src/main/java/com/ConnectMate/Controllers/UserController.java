@@ -28,5 +28,9 @@ public class UserController {
     public String userProfile() {
         return "user/profile";
     }
+    @RequestMapping(value = "/403")
+    public String user403() {
+        return "user/403";
+    }
 
 }

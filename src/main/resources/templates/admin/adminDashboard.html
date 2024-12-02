@@ -1,10 +1,87 @@
 <!DOCTYPE html>
-<html lang="en">
+<html
+        lang="en"
+        th:replace="~{base :: parent(~{::#content},~{::title},~{::script})}"
+>
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <title data-th-text="${loggedInUser.name}+' |  Dashboard'">
+        Profile Page
+    </title>
 </head>
 <body>
-    <h1>This is Admin DashBoard</h1>
+<div id="content">
+    <div th:if="${loggedInUser}">
+        <div data-th-replace="~{user/sidebar :: sidebar}"></div>
+    </div>
+    <div class="sm:pl-64 pt-20">
+        <main class="py-6 px-12 space-y-12 bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 min-h-screen w-full">
+            <section class="grid grid-cols-4 bg-white dark:bg-gray-800 divide-x dark:divide-gray-700 w-full rounded-lg">
+                <div class="flex px-8 py-5 cursor-pointer text-gray-900 dark:text-gray-100 items-center hover:bg-gray-100 dark:hover:bg-gray-700">
+                    <svg class="text-gray-600 dark:text-gray-300" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" width="48px" fill="currentColor">
+                        <path d="M212-241v-339h60v339h-60Zm242 0v-339h60v339h-60ZM80-121v-60h800v60H80Zm608-120v-339h60v339h-60ZM80-640v-53l400-228 400 228v53H80Zm134-60h532-532Zm0 0h532L480-852 214-700Z" />
+                    </svg>
+                    <div class="ml-3">
+                        <div class="font-medium leading-6">Overview</div>
+                        <div class="mt-0.5 text-sm text-gray-500 dark:text-gray-400">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</div>
+                    </div>
+                </div>
+                <!-- Repeat similar structure for other sections -->
+            </section>
+
+            <!-- Search and Cards Section -->
+            <div class="flex flex-col h-full w-full mx-auto space-y-6">
+                <section class="flex flex-col mx-auto bg-white dark:bg-gray-800 rounded-lg p-6 shadow-md space-y-6 w-full">
+                    <div class="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+                        <form class="flex flex-col relative md:col-span-3">
+                            <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor">
+                                    <path d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z" />
+                                </svg>
+                            </div>
+                            <input type="search" id="default-search" class="block w-full p-4 ps-10 text-sm text-gray-900 dark:text-gray-100 bg-gray-50 dark:bg-gray-700 border border-gray-100 dark:border-gray-600 rounded" placeholder="Search here..." required />
+                            <button type="submit" class="text-blue-500 dark:text-blue-400 absolute end-2.5 top-1.5 border border-blue-500 dark:border-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900 focus:outline-none font-medium rounded text-base px-4 py-2">Search</button>
+                        </form>
+                        <div class="col-span-1 flex items-center">
+                            <button class="relative px-4 py-2 rounded w-80 items-center justify-center bg-blue-500 dark:bg-blue-600 text-white font-medium hover:bg-blue-600 dark:hover:bg-blue-700">
+                                New facility
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 w-full min-w-0">
+                        <div class="flex flex-col px-6 py-2 bg-white dark:bg-gray-800 shadow rounded-lg overflow-hidden">
+                            <div class="flex flex-col items-center space-y-2">
+                                <div class="text-6xl font-bold tracking-tight leading-none text-blue-500 dark:text-blue-400">21</div>
+                                <div class="text-lg font-medium">In use</div>
+                            </div>
+                        </div>
+                        <!-- Repeat for other cards -->
+                        <div class="flex flex-col px-6 py-2 bg-white dark:bg-gray-800 shadow rounded-lg overflow-hidden">
+                            <div class="flex flex-col items-center space-y-2">
+                                <div class="text-6xl font-bold tracking-tight leading-none text-blue-500 dark:text-blue-400">21</div>
+                                <div class="text-lg font-medium">In use</div>
+                            </div>
+                        </div>
+                        <div class="flex flex-col px-6 py-2 bg-white dark:bg-gray-800 shadow rounded-lg overflow-hidden">
+                            <div class="flex flex-col items-center space-y-2">
+                                <div class="text-6xl font-bold tracking-tight leading-none text-blue-500 dark:text-blue-400">21</div>
+                                <div class="text-lg font-medium">In use</div>
+                            </div>
+                        </div>
+                        <div class="flex flex-col px-6 py-2 bg-white dark:bg-gray-800 shadow rounded-lg overflow-hidden">
+                            <div class="flex flex-col items-center space-y-2">
+                                <div class="text-6xl font-bold tracking-tight leading-none text-blue-500 dark:text-blue-400">21</div>
+                                <div class="text-lg font-medium">In use</div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+</div>
+<script>
+    console.log("this is admin page");
+</script>
 </body>
 </html>

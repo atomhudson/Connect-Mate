@@ -36,70 +36,57 @@ public class OAuthAuthenticationSuccessHandler implements AuthenticationSuccessH
             HttpServletResponse response,
             Authentication authentication) throws IOException, ServletException {
 
-        logger.info("OAuthAuthenicationSuccessHandler");
+        logger.info("OAuthAuthenticationSuccessHandler");
 
-        // identify the provider
-
+        // Identify the provider
         var oauth2AuthenicationToken = (OAuth2AuthenticationToken) authentication;
-
         String authorizedClientRegistrationId = oauth2AuthenicationToken.getAuthorizedClientRegistrationId();
-
-        logger.info(authorizedClientRegistrationId);
+        logger.info("Provider: {}", authorizedClientRegistrationId);
 
         var oauthUser = (DefaultOAuth2User) authentication.getPrincipal();
+        oauthUser.getAttributes().forEach((key, value) -> logger.info("{} : {}", key, value));
 
-        oauthUser.getAttributes().forEach((key, value) -> {
-            logger.info(key + " : " + value);
-        });
-
+        // Create a new user object
         User user = new User();
         user.setUserId(UUID.randomUUID().toString());
-        user.setRoleList(List.of(AppConstants.ROLE_USER));
+        user.setRoleList(List.of(AppConstants.ROLE_USER)); // Default role
         user.setEmailVerified(true);
         user.setEnabled(true);
         user.setPassword("dummy");
 
-        if (authorizedClientRegistrationId.equalsIgnoreCase("google")) {
-            // google
+        // Populate user fields based on provider
+        if ("google".equalsIgnoreCase(authorizedClientRegistrationId)) {
             user.setEmail(oauthUser.getAttribute("email").toString());
             user.setProfilePic(oauthUser.getAttribute("picture").toString());
             user.setName(oauthUser.getAttribute("name").toString());
             user.setProviderUserId(oauthUser.getName());
             user.setProvider(Providers.GOOGLE);
-            user.setAbout("This account is created using google.");
-
-        } else if (authorizedClientRegistrationId.equalsIgnoreCase("github")) {
-            // github
-            String email = oauthUser.getAttribute("email") != null ? oauthUser.getAttribute("email").toString()
+            user.setAbout("This account is created using Google.");
+        } else if ("github".equalsIgnoreCase(authorizedClientRegistrationId)) {
+            String email = oauthUser.getAttribute("email") != null
+                    ? oauthUser.getAttribute("email").toString()
                     : oauthUser.getAttribute("login").toString() + "@gmail.com";
-            String picture = oauthUser.getAttribute("avatar_url").toString();
-            String name = oauthUser.getAttribute("login").toString();
-            String providerUserId = oauthUser.getName();
-
             user.setEmail(email);
-            user.setProfilePic(picture);
-            user.setName(name);
-            user.setProviderUserId(providerUserId);
+            user.setProfilePic(oauthUser.getAttribute("https://gravatar.com/avatar/27205e5c51cb03f862138b22bcb5dc20f94a342e744ff6df1b8dc8af3c865109?f=pg").toString());
+            user.setName(oauthUser.getAttribute("login").toString());
+            user.setProviderUserId(oauthUser.getName());
             user.setProvider(Providers.GITHUB);
-
-            user.setAbout("This account is created using github");
+            user.setAbout("This account is created using GitHub.");
+        } else {
+            logger.info("Unknown provider");
         }
 
-        else if (authorizedClientRegistrationId.equalsIgnoreCase("linkedin")) {
-
-        }
-
-        else {
-            logger.info("OAuthAuthenicationSuccessHandler: Unknown provider");
-        }
-        User user2 = userRepo.findByEmail(user.getEmail()).orElse(null);
-        if (user2 == null) {
+        // Save or update user in database
+        User existingUser = userRepo.findByEmail(user.getEmail()).orElse(null);
+        if (existingUser == null) {
             userRepo.save(user);
-            System.out.println("user saved:" + user.getEmail());
+            logger.info("New user saved: {}", user.getEmail());
+        } else {
+            user = existingUser;
+            logger.info("Existing user loaded: {}", user.getEmail());
         }
 
+        // Redirect based on role
         new DefaultRedirectStrategy().sendRedirect(request, response, "/user/profile");
-
     }
-
 }

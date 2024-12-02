@@ -69,7 +69,6 @@ public class PageController {
     // registration page
     @GetMapping("/register")
     public String register(Model model) {
-
         UserForm userForm = new UserForm();
         model.addAttribute("userForm", userForm);
         return "register";
@@ -101,11 +100,11 @@ public class PageController {
 
         User savedUser = userService.saveUser(user);
 
-        System.out.println("user saved :");
+        System.out.println("user saved :"+savedUser);
 
         Message message = Message.builder().content("Registration Successful").type(MessageType.green).build();
-
         session.setAttribute("message", message);
+
         return "redirect:/register";
     }
 }

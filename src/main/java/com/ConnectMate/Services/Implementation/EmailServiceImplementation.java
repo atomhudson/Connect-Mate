@@ -19,7 +19,6 @@ public class EmailServiceImplementation implements EmailService {
 
     @Override
     public void sendEmail(String to, String subject, String body) {
-
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(to);
         message.setSubject(subject);
@@ -27,16 +26,14 @@ public class EmailServiceImplementation implements EmailService {
         message.setFrom(domainName);
         eMailSender.send(message);
     }
+
     @Override
-    public void sendEmailWithHtml() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'sendEmailWithHtml'");
+    public void sendEmail(String[] to, String subject, String body) {
+
     }
 
     @Override
-    public void sendEmailWithAttachment() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'sendEmailWithAttachment'");
-    }
+    public void sendEmailWithHTML(String[] to, String subject, String body) {
 
+    }
 }

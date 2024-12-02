@@ -17,7 +17,11 @@
           <!--  profie card -->
           <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg max-w-2xl w-full">
             <div class="flex flex-col items-center">
-                <img data-th-src="@{${loggedInUser.profilePic}}" th:src="@{'https://gravatar.com/avatar/27205e5c51cb03f862138b22bcb5dc20f94a342e744ff6df1b8dc8af3c865109?f=pg'}" alt="Profile Photo" class="w-44 h-44 rounded-full shadow-lg object-cover mb-4">
+                <img
+                        th:src="${loggedInUser.profilePic != null ? loggedInUser.profilePic : 'https://gravatar.com/avatar/27205e5c51cb03f862138b22bcb5dc20f94a342e744ff6df1b8dc8af3c865109?f=pg'}"
+                        alt="Profile Photo"
+                        class="w-44 h-44 rounded-full shadow-lg object-cover mb-4"
+                >
                 <h2 class="text-2xl font-semibold mb-2" data-th-text=${loggedInUser.name}>User Name</h2>
                 <p class="text-gray-600 mb-2" data-th-text="${loggedInUser.email}">user.email@example.com</p>
                 <p class="text-gray-600 mb-2" data-th-text="${loggedInUser.phoneNumber}">123-456-7890</p>

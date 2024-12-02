@@ -13,6 +13,7 @@ import com.ConnectMate.Services.Implementation.SecurityCustomUserDetailServiceIm
 
 @Configuration
 public class SecurityConfiguration {
+
     @Autowired
     private SecurityCustomUserDetailServiceImplementation userDetailService;
 
@@ -23,7 +24,7 @@ public class SecurityConfiguration {
     private AuthenticationFailureHandler authenticationFailureHandler;
 
     @Autowired
-    private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+    private AuthenticationSuccessHandler authenticationSuccessHandler;
 
     @Bean
     public DaoAuthenticationProvider authenticationProvider() {
@@ -47,22 +48,21 @@ public class SecurityConfiguration {
         httpSecurity.formLogin(formLogin -> {
             formLogin.loginPage("/login");
             formLogin.loginProcessingUrl("/authenticate");
-            formLogin.successForwardUrl("/user/profile");
+            formLogin.successHandler(authenticationSuccessHandler); // Correct the handler here
             formLogin.usernameParameter("email");
             formLogin.passwordParameter("password");
             formLogin.failureHandler(authenticationFailureHandler);
         });
-
-//        httpSecurity.exceptionHandling(exception ->
-//                exception.authenticationEntryPoint(jwtAuthenticationEntryPoint)
-//                        .accessDeniedPage("/user/403")
-//        );
 
         httpSecurity.csrf(AbstractHttpConfigurer::disable);
 
         httpSecurity.oauth2Login(oauth -> {
             oauth.loginPage("/login");
             oauth.successHandler(handler);
+        });
+
+        httpSecurity.exceptionHandling(oauth -> {
+            oauth.accessDeniedPage("/user/403");
         });
 
         httpSecurity.logout(logoutForm -> {

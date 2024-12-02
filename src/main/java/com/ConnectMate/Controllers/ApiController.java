@@ -18,5 +18,4 @@ public class ApiController {
     public Contact getContact(@PathVariable String contactId) {
         return contactService.getById(contactId);
     }
-
 }

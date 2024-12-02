@@ -2,13 +2,21 @@ package com.ConnectMate;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.ConnectMate.Services.EmailService;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
 class ApplicationTests {
 
+	@Autowired
+	private EmailService emailService;
 
-	void contextLoads() {
+	@Test
+	void sendEmailTest() {
+		System.out.println("Email sending");
+		emailService.sendEmail("test@Gmail.com", "Email from ConnectMate Application", "Test");
 	}
 //
 //	@Autowired

@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.stereotype.Component;
 
 import com.ConnectMate.Helpers.Message;
@@ -25,14 +26,14 @@ public class AuthenticationFailureHandler implements org.springframework.securit
             HttpSession session = request.getSession();
             session.setAttribute("message",
                     Message.builder()
-                            .content("User is disabled, Email with  varification link is sent on your email id !!")
+                            .content("User is disabled, Email with  verification link is sent on your email id !!")
                             .type(MessageType.red).build());
 
             response.sendRedirect("/login");
+        } else if (exception instanceof AccessDeniedHandler) {
+            response.sendRedirect("/403");
         } else {
             response.sendRedirect("/login?error=true");
-            // request.getRequestDispatcher("/login").forward(request, response);
-
         }
 
     }

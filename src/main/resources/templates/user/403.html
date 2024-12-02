@@ -1,36 +1,37 @@
 <!DOCTYPE html>
-<html
-        lang="en"
-        th:replace="~{base :: parent(~{::#content},~{::title},~{::script})}"
->
+<html lang="en" th:replace="~{base :: parent(~{::#content},~{::title},~{::script})}">
 <head>
-    <title data-th-text="${loggedInUser.name}+' |  SCM'">Profile Page</title>
+    <title data-th-text="${loggedInUser.name}+' | SCM'">Profile Page</title>
 </head>
-<body>
+<body class="bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200">
 <div id="content">
+    <!-- Sidebar -->
     <div th:if="${loggedInUser}">
         <div data-th-replace="~{user/sidebar :: sidebar}"></div>
     </div>
-
-    <div class="sm:pl-64 pt-20" style="height: 1000px">
+    <!-- Main Content -->
+    <div class="sm:pl-64 pt-20">
         <div class="flex items-center justify-center md:pt-32 flex-col">
-            <div class="text-center p-6 bg-white shadow-lg rounded-lg max-w-md w-full">
-                <div class="text-6xl text-red-600 font-bold mb-4">
+            <div class="text-center p-6 bg-white dark:bg-gray-800 shadow-lg rounded-lg max-w-md w-full">
+                <div class="text-6xl text-red-600 dark:text-red-400 font-bold mb-4">
                     403
                 </div>
-                <h1 class="text-3xl text-gray-800 font-semibold mb-2">
+                <h1 class="text-3xl text-gray-800 dark:text-gray-100 font-semibold mb-2">
                     Forbidden
                 </h1>
-                <p class="text-gray-600 mb-4">
-                    You do not have permission to access this page. Please contact the administrator if you believe this is an error.
+                <p class="text-gray-600 dark:text-gray-300 mb-4">
+                    You do not have permission to access this page. Please
+                    contact the administrator if you believe this is an error.
                 </p>
-                <a href="/" class="text-blue-500 hover:underline text-lg">Go back to home</a>
+                <a th:href="@{'/user/profile'}" class="text-blue-500 dark:text-blue-300 hover:underline text-lg">
+                    Go back to home
+                </a>
             </div>
         </div>
     </div>
-
-    <script>
-        console.log("this is profile page");
-    </script>
+</div>
+<script>
+    console.log("403 Forbidden")
+</script>
 </body>
 </html>

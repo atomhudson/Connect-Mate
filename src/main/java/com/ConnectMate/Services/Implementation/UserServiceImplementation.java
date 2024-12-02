@@ -49,7 +49,6 @@ public class UserServiceImplementation implements UserService {
         String emailLink = helper.getLinkForEmailVerificatiton(emailToken);
         emailService.sendEmail(savedUser.getEmail(), "Verify Account : Smart  Contact Manager", emailLink);
         return savedUser;
-
     }
 
     @Override
