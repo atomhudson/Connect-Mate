@@ -9,6 +9,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -37,9 +38,11 @@ public class Application  implements CommandLineRunner {
 		user.setEnabled(true);
 		user.setAbout("This is dummy user created initially");
 		user.setPhoneVerified(true);
+		user.setDate(new Date());
+		user.setLastUpdated(new Date());
 
 		userRepo.findByEmail("admin@gmail.com").ifPresentOrElse(user1 -> {},() -> {
-			userRepo.save(user);
+//			userRepo.save(user);
 			System.out.println("user created");
 		});
 	}

@@ -40,7 +40,6 @@ public class SecurityConfiguration {
         httpSecurity.authorizeHttpRequests(authorize -> {
             // authorization rules
             authorize.requestMatchers("admin/**").hasRole("ADMIN");
-            authorize.requestMatchers("user/**").permitAll();
             authorize.requestMatchers("/user/**").authenticated();
             authorize.anyRequest().permitAll();
         });

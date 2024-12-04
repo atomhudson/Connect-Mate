@@ -239,5 +239,4 @@ public class ContactController {
 
         return "redirect:/user/contacts/view/" + contactId;
     }
-
 }

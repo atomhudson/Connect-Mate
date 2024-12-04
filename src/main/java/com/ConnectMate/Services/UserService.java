@@ -1,9 +1,11 @@
 package com.ConnectMate.Services;
 
+
 import java.util.List;
 import java.util.Optional;
 
 import com.ConnectMate.Entities.User;
+import org.springframework.data.domain.Page;
 
 public interface UserService {
 

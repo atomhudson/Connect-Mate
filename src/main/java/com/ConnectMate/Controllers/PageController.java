@@ -19,6 +19,8 @@ import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
+import java.util.Date;
+
 @Controller
 public class PageController {
 
@@ -97,6 +99,8 @@ public class PageController {
         user.setPhoneNumber(userForm.getPhoneNumber());
         user.setEnabled(false);
         user.setProfilePic("https://gravatar.com/avatar/27205e5c51cb03f862138b22bcb5dc20f94a342e744ff6df1b8dc8af3c865109?f=pg");
+        user.setDate(new Date());
+        user.setLastUpdated(new Date());
 
         User savedUser = userService.saveUser(user);
 

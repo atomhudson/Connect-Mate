@@ -1,12 +1,15 @@
 package com.ConnectMate.Configuration;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.web.DefaultRedirectStrategy;
@@ -30,6 +33,10 @@ public class OAuthAuthenticationSuccessHandler implements AuthenticationSuccessH
     @Autowired
     private UserRepo userRepo;
 
+    @Autowired
+    @Lazy
+    private PasswordEncoder passwordEncoder;
+
     @Override
     public void onAuthenticationSuccess(
             HttpServletRequest request,
@@ -52,7 +59,7 @@ public class OAuthAuthenticationSuccessHandler implements AuthenticationSuccessH
         user.setRoleList(List.of(AppConstants.ROLE_USER)); // Default role
         user.setEmailVerified(true);
         user.setEnabled(true);
-        user.setPassword("dummy");
+        user.setPassword(passwordEncoder.encode("dummy"));
 
         // Populate user fields based on provider
         if ("google".equalsIgnoreCase(authorizedClientRegistrationId)) {
@@ -62,6 +69,7 @@ public class OAuthAuthenticationSuccessHandler implements AuthenticationSuccessH
             user.setProviderUserId(oauthUser.getName());
             user.setProvider(Providers.GOOGLE);
             user.setAbout("This account is created using Google.");
+            user.setDate(new Date());
         } else if ("github".equalsIgnoreCase(authorizedClientRegistrationId)) {
             String email = oauthUser.getAttribute("email") != null
                     ? oauthUser.getAttribute("email").toString()
@@ -72,6 +80,8 @@ public class OAuthAuthenticationSuccessHandler implements AuthenticationSuccessH
             user.setProviderUserId(oauthUser.getName());
             user.setProvider(Providers.GITHUB);
             user.setAbout("This account is created using GitHub.");
+            user.setDate(new Date());
+            user.setLastUpdated(new Date());
         } else {
             logger.info("Unknown provider");
         }

@@ -14,7 +14,7 @@
       <div class="sm:pl-64 pt-20" style="height: 1000px">
         <div class="grid grid-cols-12">
           <div class="col-span-3"></div>
-          <div class="col-span-12 md:col-span-6">
+          <div class="col-span-12 md:col-span-6" >
             <div
               class="card block p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700"
             >
@@ -46,13 +46,17 @@
                       class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none"
                     >
                       <i class="fa-regular w-4 h-4 fa-user"></i>
+
                     </div>
-                    <input
-                      data-th-field="*{name}"
-                      type="text"
-                      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                      placeholder="name"
-                    />
+                    <div>
+                      <input
+                              data-th-field="*{name}"
+                              type="text"
+                              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 display:overlay"
+                              placeholder="name"
+                      />
+                    </div>
+
                   </div>
                   <p
                     class="text-red-500"

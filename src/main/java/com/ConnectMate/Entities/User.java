@@ -66,6 +66,10 @@ public class User implements UserDetails {
 
     private String emailToken;
 
+    private Date date;
+
+    private Date lastUpdated;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         // list of roles[USER,ADMIN]

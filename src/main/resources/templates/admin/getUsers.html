@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html
+        lang="en"
+        th:replace="~{base :: parent(~{::#content},~{::title},~{::script})}"
+>
+<head>
+    <title>All Your Contacts</title>
+</head>
+<body>
+<div id="content">
+    <div th:if="${loggedInUser}">
+        <div data-th-replace="~{user/sidebar :: sidebar}"></div>
+    </div>
+    <div class="sm:pl-64 pt-20">
+        <div class="">
+            <h1 class="text-5xl text-center">All Your Contacts</h1>
+            <p class="text-center">List of all contacts...</p>
+
+            <div class="contacts_container p-5">
+                <div
+                        class="flex md:flex-row flex-col items-center px-4 justify-between bg-white dark:bg-gray-900"
+                >
+                    <div>
+                        <button
+                                type="button"
+                                onclick="exportData()"
+                                class="px-3 py-2 bg-green-800 text-white rounded"
+                        >
+                            Export
+                        </button>
+                    </div>
+                </div>
+                <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+                    <div data-th-replace="~{message :: messagebox}"></div>
+
+                    <table
+                            id="contact-table"
+                            data-th-if="${pageContact != null and pageContact.size() > 0}"
+                            class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400"
+                    >
+                        <thead
+                                class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400"
+                        >
+                        <tr>
+                            <th scope="col" class="px-6 py-3">Name</th>
+                            <th scope="col" class="px-6 py-3">Phone</th>
+                            <th scope="col" class="px-6 py-3">Links</th>
+                            <th scope="col" class="px-6 py-3">Action</th>
+                            <th scope="col" class="px-6 py-3">Role</th>
+                            <th scope="col" class="px-6 py-3">Date Account Created</th>
+                            <th scope="col" class="px-6 py-3">Account Created By...</th>
+                            <th scope="col" class="px-6 py-3">is_Phone</th>
+                            <th scope="col" class="px-6 py-3">is_Enabled</th>
+                            <th scope="col" class="px-6 py-3">is_Email_Verified</th>
+                            <th scope="col" class="px-6 py-3">Delete Account</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr
+                                data-th-each="user : ${pageContact}"
+                                class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
+                        >
+                            <th
+                                    scope="row"
+                                    class="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap dark:text-white"
+                            >
+                                <img
+                                        onerror="this.src='https://gravatar.com/avatar/27205e5c51cb03f862138b22bcb5dc20f94a342e744ff6df1b8dc8af3c865109?f=pg'"
+                                        class="w-10 h-10 rounded-full"
+                                        th:src="${user.profilePic != null ? user.profilePic : '/static/images/profile-pic.jpg'}"
+                                        alt="Profile Pic"
+                                />
+                                <div class="ps-3">
+                                    <div
+                                            class="text-base font-semibold"
+                                            th:text="${user.name}"
+                                    ></div>
+                                    <div
+                                            class="font-normal text-gray-500"
+                                            th:text="${user.email}"
+                                    ></div>
+                                </div>
+                            </th>
+
+
+                            <td class="px-6 py-4">
+                                <i class="fa-solid fa-phone w-4 h-4"></i>
+                                <span th:text="${user.phoneNumber}"></span>
+                            </td>
+
+                            <td class="px-6 py-4">
+                                <div class="flex items-center">
+                                    <a th:href="${user.providerUserId}" target="_blank">
+                                        <i class="fa-solid w-6 h-6 fa-link"></i>
+                                    </a>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4">
+                                <div>
+                                    <a th:href="@{'/admin/updateUser/' + ${user.userId}}">
+                                        <i class="fa-solid w-6 h-6 fa-pen"></i>
+                                    </a>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4">
+                                <div class="flex items-center">
+                                    <span th:if="${user.getRoleList().get(0) == 'ROLE_USER'}">
+                                        <i class="fa-solid fa-user-large"></i>
+                                        <span class="text-green-600">USER</span>
+                                    </span>
+                                    <span th:if="${user.getRoleList().get(0) == 'ROLE_ADMIN'}">
+                                        <i class="fa-solid fa-user-lock"></i>
+                                        <span class="text-red-600">ADMIN</span>
+                                    </span>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4">
+                                <div class="flex items-center">
+                                    <span th:data="${user.getDate()}" target="_blank">
+                                        <i class="fa-solid fa-calendar-plus"></i>
+                                        <span class="text-lg text-gray-800" th:text="${#dates.format(user.getDate(), 'yyyy-MM-dd')}"></span>
+                                    </span>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4">
+                                <span th:if="${user.getProvider().toString().equals('GOOGLE')}">
+                                    <i class="fa-brands fa-google-plus-g fa-2xl" style="color: #ff0000;"></i>
+                                </span>
+                                <span th:if="${user.getProvider().toString().equals('GITHUB')}">
+                                    <i class="fa-brands fa-square-github fa-2xl"></i>
+                                </span>
+                                <span th:if="${user.getProvider().toString() == 'SELF'}">
+                                    <i class="fa-solid fa-image-portrait fa-2xl" style="color: #63E6BE;"></i>
+                                </span>
+                            </td>
+                            <td th:if="${user.isPhoneVerified()}" class="px-6 py-4">
+                                <button
+                                        type="button"
+                                        class="text-white bg-gradient-to-r from-green-400 via-green-500 to-green-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2"
+                                >
+                                    Verified
+                                </button>
+                            </td>
+                            <td th:if="${!user.isPhoneVerified()}" class="px-6 py-4">
+                                <button
+                                        type="button"
+                                        class="text-white bg-gradient-to-r from-red-400 via-red-500 to-red-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2"
+                                >
+                                    Not Verified
+                                </button>
+                            </td>
+                            <td th:if="${user.isEnabled()}" class="px-6 py-4">
+                                <button
+                                        type="button"
+                                        class="text-white bg-gradient-to-r from-green-400 via-green-500 to-green-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2"
+                                >
+                                    Enabled
+                                </button>
+                            </td>
+                            <td th:if="${!user.isEnabled()}" class="px-6 py-4">
+                                <button
+                                        type="button"
+                                        class="text-white bg-gradient-to-r from-red-400 via-red-500 to-red-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2"
+                                >
+                                    Not Enabled
+                                </button>
+                            </td>
+                            <td th:if="${user.isEmailVerified()}" class="px-6 py-4">
+                                <button
+                                        type="button"
+                                        class="text-white bg-gradient-to-r from-green-400 via-green-500 to-green-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2"
+                                >
+                                    Verified
+                                </button>
+                            </td>
+                            <td th:if="${!user.isEmailVerified()}" class="px-6 py-4">
+                                <button
+                                        type="button"
+                                        class="text-white bg-gradient-to-r from-red-400 via-red-500 to-red-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2"
+                                >
+                                    Not Verified
+                                </button>
+                            </td>
+                            <td class="px-6 py-4">
+                                <button
+                                        type="button"
+                                        class="text-white bg-gradient-to-r from-red-400 via-red-500 to-red-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2"
+                                >
+                                    Delete
+                                </button>
+                            </td>
+
+
+
+                        </tr>
+                        </tbody>
+                    </table>
+
+                    </table>
+
+                    <!-- pagination component  -->
+<!--                    <div-->
+<!--                            data-th-if="${pageContact.totalElements>0}"-->
+<!--                            class="pagination_container bg-white dark:bg-gray-800 p-5 text-center"-->
+<!--                    >-->
+<!--                        <nav aria-label="Page navigation example">-->
+<!--                            <ul class="inline-flex -space-x-px text-base h-10">-->
+<!--                                <li data-th-unless="${pageContact.first}">-->
+<!--                                    <a-->
+<!--                                            data-th-href="@{'/user/contacts?size='+${pageSize}+'&page=' + ${pageContact.number-1}}"-->
+<!--                                            href="#"-->
+<!--                                            class="flex items-center justify-center px-4 h-10 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"-->
+<!--                                    >Previous</a-->
+<!--                                    >-->
+<!--                                </li>-->
+<!--                                <li-->
+<!--                                        data-th-each="index :  ${#numbers.sequence(0,pageContact.totalPages-1)}"-->
+<!--                                >-->
+<!--                                    <a-->
+<!--                                            data-th-href="@{'/user/contacts?size='+${pageSize}+'&page='+${index}}"-->
+<!--                                            href="#"-->
+<!--                                            data-th-classappend="${index==pageContact.number? 'bg-blue-50  dark:bg-gray-600' : 'bg-white dark:bg-gray-800'}"-->
+<!--                                            class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"-->
+<!--                                    >-->
+<!--                                        <span data-th-text="${index+1}"></span>-->
+<!--                                    </a>-->
+<!--                                </li>-->
+
+<!--                                <li data-th-unless="${pageContact.last}">-->
+<!--                                    <a-->
+<!--                                            data-th-href="@{'/user/contacts?size='+${pageSize}+'&page=' + ${pageContact.number+1}}"-->
+<!--                                            href="#"-->
+<!--                                            class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"-->
+<!--                                    >Next</a-->
+<!--                                    >-->
+<!--                                </li>-->
+<!--                            </ul>-->
+<!--                        </nav>-->
+<!--                    </div>-->
+<!--                    <h1-->
+<!--                            class="text-5xl text-center dark:bg-gray-800 dark:text-white bg-white p-4"-->
+<!--                            data-th-if="${pageContact.totalElements<=0}"-->
+<!--                    >-->
+<!--                        No result found-->
+<!--                    </h1>-->
+                </div>
+            </div>
+        </div>
+        <div data-th-replace="~{ user/contact_modals :: contact}"></div>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/@linways/table-to-excel@1.0.4/dist/tableToExcel.min.js"></script>
+<script data-th-src="@{'/js/contacts.js'}"></script>
+<script>
+    // function exportData() {
+    //     TableToExcel.convert(document.getElementById("contact-table"), {
+    //         name: "contacts.xlsx",
+    //         sheet: {
+    //             name: "Sheet 1",
+    //         },
+    //     });
+    // }
+</script>
+</body>
+</html>
+
