@@ -38,3 +38,28 @@
     cursor: not-allowed;
   }
 }
+.custom-confirm-button {
+  background-color: #4caf50; /* Green color */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 15px;
+  cursor: pointer;
+}
+
+.custom-confirm-button:hover {
+  background-color: #45a049; /* Darker green */
+}
+
+.custom-cancel-button {
+  background-color: #f44336; /* Red color */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 15px;
+  cursor: pointer;
+}
+
+.custom-cancel-button:hover {
+  background-color: #e53935; /* Darker red */
+}

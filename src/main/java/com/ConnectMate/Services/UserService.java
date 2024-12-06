@@ -25,4 +25,11 @@ public interface UserService {
 
     User getUserByEmail(String email);
 
+//    boolean isUserEnabled(String userId);
+
+    Optional<User> isEnabled(String email);
+
+    Optional<User> isEmailVerified(String email);
+
+    Optional<User> isPhoneVerified(String phone);
 }

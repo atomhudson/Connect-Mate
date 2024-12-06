@@ -74,10 +74,104 @@ async function deleteContact(id) {
     icon: "warning",
     showCancelButton: true,
     confirmButtonText: "Delete",
+    customClass: {
+      confirmButton: 'custom-confirm-button',
+      cancelButton: 'custom-cancel-button'
+    },
+    buttonsStyling: false
   }).then((result) => {
     /* Read more about isConfirmed, isDenied below */
     if (result.isConfirmed) {
       const url = `${baseURL}/user/contacts/delete/` + id;
+      window.location.replace(url);
+    }
+  });
+}
+
+async function isEnabled(email, status) {
+  const action = status ? "disable" : "enable";
+  const title = `Do you want to ${action} this user?`;
+
+  Swal.fire({
+    title: title,
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonText: "Confirm",
+    customClass: {
+      actions: 'flex justify-center space-x-4',
+      confirmButton: 'custom-confirm-button',
+      cancelButton: 'custom-cancel-button'
+    },
+    buttonsStyling: false
+  }).then((result) => {
+    if (result.isConfirmed) {
+      const url = `${baseURL}/admin/userUpdate/isEnabled/` + email;
+      window.location.replace(url);
+    }
+  });
+}
+
+async function isEmailVerified(email, status) {
+  const action = status ? "mark as not verified" : "verify";
+  const title = `Are you sure you want to ${action} this user's email?`;
+
+
+  Swal.fire({
+    title: title,
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonText: "Confirm",
+    customClass: {
+      actions: 'flex justify-center space-x-4',
+      confirmButton: 'custom-confirm-button',
+      cancelButton: 'custom-cancel-button'
+    },
+    buttonsStyling: false
+  }).then((result) => {
+    if (result.isConfirmed) {
+      const url = `${baseURL}/admin/userUpdate/isEmailVerified/` + email;
+      window.location.replace(url);
+    }
+  });
+}
+
+async function isPhoneVerified(email, status) {
+  const action = status ? "mark the phone number as unverified" : "verify the phone number";
+  const title = `Are you sure you want to ${action}?`;
+  Swal.fire({
+    title: title,
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonText: "Confirm",
+    customClass: {
+      actions: 'flex justify-center space-x-4',
+      confirmButton: 'custom-confirm-button',
+      cancelButton: 'custom-cancel-button'
+    },
+    buttonsStyling: false
+  }).then((result) => {
+    if (result.isConfirmed) {
+      const url = `${baseURL}/admin/userUpdate/isPhoneVerified/` + email;
+      window.location.replace(url);
+    }
+  });
+}
+async function deleteUser(email) {
+  const title = `Are you sure you want to remove this User : `+email;
+  Swal.fire({
+    title: title,
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonText: "Confirm",
+    customClass: {
+      actions: 'flex justify-center space-x-4',
+      confirmButton: 'custom-confirm-button',
+      cancelButton: 'custom-cancel-button'
+    },
+    buttonsStyling: false
+  }).then((result) => {
+    if (result.isConfirmed) {
+      const url = `${baseURL}/admin/userUpdate/deleteUser/` + email;
       window.location.replace(url);
     }
   });

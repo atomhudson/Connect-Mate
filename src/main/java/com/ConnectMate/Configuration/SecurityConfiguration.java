@@ -47,7 +47,7 @@ public class SecurityConfiguration {
         httpSecurity.formLogin(formLogin -> {
             formLogin.loginPage("/login");
             formLogin.loginProcessingUrl("/authenticate");
-            formLogin.successHandler(authenticationSuccessHandler); // Correct the handler here
+            formLogin.successHandler(authenticationSuccessHandler);
             formLogin.usernameParameter("email");
             formLogin.passwordParameter("password");
             formLogin.failureHandler(authenticationFailureHandler);

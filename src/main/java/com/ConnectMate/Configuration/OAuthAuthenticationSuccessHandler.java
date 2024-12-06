@@ -3,7 +3,8 @@ package com.ConnectMate.Configuration;
 import java.io.IOException;
 import java.util.Date;
 import java.util.UUID;
-
+import com.ConnectMate.Helpers.Message;
+import com.ConnectMate.Helpers.MessageType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +21,6 @@ import com.ConnectMate.Entities.Providers;
 import com.ConnectMate.Entities.User;
 import com.ConnectMate.Helpers.AppConstants;
 import com.ConnectMate.Repositories.UserRepo;
-
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -45,12 +45,18 @@ public class OAuthAuthenticationSuccessHandler implements AuthenticationSuccessH
 
         logger.info("OAuthAuthenticationSuccessHandler");
 
+        // Ensure that we have an OAuth2AuthenticationToken
+        if (!(authentication instanceof OAuth2AuthenticationToken)) {
+            logger.error("Authentication is not OAuth2AuthenticationToken");
+            return;
+        }
+
         // Identify the provider
-        var oauth2AuthenicationToken = (OAuth2AuthenticationToken) authentication;
+        OAuth2AuthenticationToken oauth2AuthenicationToken = (OAuth2AuthenticationToken) authentication;
         String authorizedClientRegistrationId = oauth2AuthenicationToken.getAuthorizedClientRegistrationId();
         logger.info("Provider: {}", authorizedClientRegistrationId);
 
-        var oauthUser = (DefaultOAuth2User) authentication.getPrincipal();
+        DefaultOAuth2User oauthUser = (DefaultOAuth2User) authentication.getPrincipal();
         oauthUser.getAttributes().forEach((key, value) -> logger.info("{} : {}", key, value));
 
         // Create a new user object
@@ -63,20 +69,20 @@ public class OAuthAuthenticationSuccessHandler implements AuthenticationSuccessH
 
         // Populate user fields based on provider
         if ("google".equalsIgnoreCase(authorizedClientRegistrationId)) {
-            user.setEmail(oauthUser.getAttribute("email").toString());
-            user.setProfilePic(oauthUser.getAttribute("picture").toString());
-            user.setName(oauthUser.getAttribute("name").toString());
+            user.setEmail(oauthUser.getAttribute("email"));
+            user.setProfilePic(oauthUser.getAttribute("picture"));
+            user.setName(oauthUser.getAttribute("name"));
             user.setProviderUserId(oauthUser.getName());
             user.setProvider(Providers.GOOGLE);
             user.setAbout("This account is created using Google.");
             user.setDate(new Date());
         } else if ("github".equalsIgnoreCase(authorizedClientRegistrationId)) {
             String email = oauthUser.getAttribute("email") != null
-                    ? oauthUser.getAttribute("email").toString()
-                    : oauthUser.getAttribute("login").toString() + "@gmail.com";
+                    ? oauthUser.getAttribute("email")
+                    : oauthUser.getAttribute("login") + "@github.com";
             user.setEmail(email);
-            user.setProfilePic(oauthUser.getAttribute("https://gravatar.com/avatar/27205e5c51cb03f862138b22bcb5dc20f94a342e744ff6df1b8dc8af3c865109?f=pg").toString());
-            user.setName(oauthUser.getAttribute("login").toString());
+            user.setProfilePic(oauthUser.getAttribute("avatar_url"));
+            user.setName(oauthUser.getAttribute("login"));
             user.setProviderUserId(oauthUser.getName());
             user.setProvider(Providers.GITHUB);
             user.setAbout("This account is created using GitHub.");
@@ -93,10 +99,21 @@ public class OAuthAuthenticationSuccessHandler implements AuthenticationSuccessH
             logger.info("New user saved: {}", user.getEmail());
         } else {
             user = existingUser;
+            if (!user.isEnabled()) {
+                request.getSession().setAttribute("message", Message.builder()
+                        .type(MessageType.red)
+                        .content("User is disabled, Email with verification link is sent on your email id or Contact Us!!")
+                        .build());
+                System.out.println("email not verified");
+                logger.info("Email not verified");
+                new DefaultRedirectStrategy().sendRedirect(request, response, "/login?error=true");
+
+            } else {
+                System.out.println("user logged in");
+                logger.info("user logged in");
+                new DefaultRedirectStrategy().sendRedirect(request, response, "/user/profile");
+            }
             logger.info("Existing user loaded: {}", user.getEmail());
         }
-
-        // Redirect based on role
-        new DefaultRedirectStrategy().sendRedirect(request, response, "/user/profile");
     }
 }

@@ -92,6 +92,45 @@ public class UserServiceImplementation implements UserService {
         return user2 != null ? true : false;
     }
 
+//    @Override
+//    public boolean isUserEnabled(String userId) {
+//        if (isUserExist(userId)) {
+//            User user2 = userRepo.findById(userId).orElse(null);
+//            return user2 != null && user2.isEnabled();
+//        }
+//        return false;
+//    }
+
+    @Override
+    public Optional<User> isEnabled(String email) {
+        User user2 = getUserByEmail(email);
+        if (user2 != null) {
+            user2.setEnabled(!user2.isEnabled());
+            return Optional.of(userRepo.save(user2));
+        }
+        return Optional.empty();
+    }
+
+    @Override
+    public Optional<User> isEmailVerified(String email) {
+        User user = getUserByEmail(email);
+        if (user != null) {
+            user.setEmailVerified(!user.isEmailVerified());
+            return Optional.of(userRepo.save(user));
+        }
+        return Optional.empty();
+    }
+
+    @Override
+    public Optional<User> isPhoneVerified(String email) {
+        User user = getUserByEmail(email);
+        if (user != null) {
+            user.setPhoneVerified(!user.isPhoneVerified());
+            return Optional.of(userRepo.save(user));
+        }
+        return Optional.empty();
+    }
+
     @Override
     public boolean isUserExistByEmail(String email) {
         User user = userRepo.findByEmail(email).orElse(null);
