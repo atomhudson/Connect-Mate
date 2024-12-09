@@ -15,6 +15,12 @@ public interface UserRepo extends JpaRepository<User, String> {
 //    Page<User> getAllUsers(Pageable pageable);
 //    Optional<User> getAllUsers();
 
+    Page<User> findAll(Pageable pageable);
+    Page<User> findByNameContaining(String name,Pageable pageable);
+    Page<User> findByEmailContaining(String email,Pageable pageable);
+    Page<User> findByPhoneNumberContaining(String phoneNumber,Pageable peable);
+
+
     Optional<User> findByEmail(String email);
     Optional<User> findByEmailAndPassword(String email, String password);
     Optional<User> findByEmailToken(String id);

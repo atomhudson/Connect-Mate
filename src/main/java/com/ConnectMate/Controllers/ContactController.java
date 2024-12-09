@@ -55,7 +55,7 @@ public class ContactController {
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public String saveContact(@Valid @ModelAttribute ContactForm contactForm, BindingResult result,
-            Authentication authentication, HttpSession session) {
+                              Authentication authentication, HttpSession session) {
         if (result.hasErrors()) {
             result.getAllErrors().forEach(error -> logger.info(error.toString()));
             session.setAttribute("message", Message.builder()
@@ -198,9 +198,9 @@ public class ContactController {
 
     @RequestMapping(value = "/update/{contactId}", method = RequestMethod.POST)
     public String updateContact(@PathVariable("contactId") String contactId,
-            @Valid @ModelAttribute ContactForm contactForm,
-            BindingResult bindingResult,
-            Model model) {
+                                @Valid @ModelAttribute ContactForm contactForm,
+                                BindingResult bindingResult,
+                                Model model) {
 
         // update the contact
         if (bindingResult.hasErrors()) {

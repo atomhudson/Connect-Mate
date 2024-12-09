@@ -16,7 +16,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
@@ -52,28 +54,44 @@ public class AdminController {
         return "admin/createUser";
     }
 
-    @RequestMapping(value = "/getUsers")
-    public String getUsers(Model model) {
-        List<User> users = userRepo.findAll();
+    @RequestMapping(value = "/getUsers", method = RequestMethod.GET)
+    public String getUsers(Model model,
+                           @RequestParam(value = "page", defaultValue = "0") int page,
+                           @RequestParam(value = "size", defaultValue = AppConstants.PAGE_SIZE + "") int size,
+                           @RequestParam(value = "sortBy", defaultValue = "name") String sortBy,
+                           @RequestParam(value = "direction", defaultValue = "asc") String direction) {
+        Page<User> users = userService.getAllUsers(size, page, sortBy, direction);
+        if (users == null || users.isEmpty()) {
+            users = Page.empty(); // Ensure an empty page object is returned when no users exist
+        }
         model.addAttribute("pageContact", users);
+        model.addAttribute("pageSize", size);
+        model.addAttribute("userSearchForm", new UserSearchForm());
         return "admin/getUsers";
     }
 
-    @RequestMapping
-    public String viewContacts(
-            @RequestParam(value = "page", defaultValue = "0") int page,
-            @RequestParam(value = "size", defaultValue = AppConstants.PAGE_SIZE + "") int size,
-            @RequestParam(value = "sortBy", defaultValue = "name") String sortBy,
-            @RequestParam(value = "direction", defaultValue = "asc") String direction, Model model) {
-
-        System.out.println("view users runs");
-        List<User> users = userService.getAllUsers();
-        logger.info("users: " + users.get(0).getProvider());
-        System.out.println("Users: " + users);
-
-        model.addAttribute("pageContact", users);
+//    Search Handler
+    @RequestMapping(value = "/user/search")
+    public String searchUsers(
+            @ModelAttribute UserSearchForm userSearchForm,
+            @RequestParam(value = "size",defaultValue = AppConstants.PAGE_SIZE+"") int size,
+            @RequestParam(value = "page",defaultValue = "0")int page,
+            @RequestParam(value = "sortBy",defaultValue = "name") String sortBy,
+            @RequestParam(value = "direction",defaultValue = "asc") String direction,
+            Model model
+    ){
+        Page<User> pageContact = null;
+        if (userSearchForm.getField().equalsIgnoreCase("name")){
+            pageContact = userService.searchByName(userSearchForm.getValue(), size, page, sortBy, direction);
+        } else if (userSearchForm.getField().equalsIgnoreCase("email")) {
+            pageContact = userService.searchByEmail(userSearchForm.getValue(), size, page, sortBy, direction);
+        } else if (userSearchForm.getField().equalsIgnoreCase("phone")) {
+            pageContact = userService.searchByPhone(userSearchForm.getValue(), size, page, sortBy, direction);
+        }
+        model.addAttribute("pageContact", pageContact);
+        model.addAttribute("userSearchForm", userSearchForm);
         model.addAttribute("pageSize", AppConstants.PAGE_SIZE);
-        return "admin/getUsers";
+        return "admin/adminSearch";
     }
 
 

@@ -21,7 +21,7 @@ public interface UserService {
 
     boolean isUserExistByEmail(String email);
 
-    List<User> getAllUsers();
+    Page<User> getAllUsers(int size,int page,String sortBy,String direction);
 
     User getUserByEmail(String email);
 
@@ -32,4 +32,8 @@ public interface UserService {
     Optional<User> isEmailVerified(String email);
 
     Optional<User> isPhoneVerified(String phone);
+
+    Page<User> searchByName(String nameKeyword,int size, int page, String sortBy, String direction);
+    Page<User> searchByEmail(String emailKeyword,int size, int page, String sortBy, String direction);
+    Page<User> searchByPhone(String phoneKeyword,int size, int page, String sortBy, String direction);
 }

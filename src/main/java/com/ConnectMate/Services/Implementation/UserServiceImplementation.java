@@ -132,14 +132,37 @@ public class UserServiceImplementation implements UserService {
     }
 
     @Override
+    public Page<User> searchByName(String nameKeyword, int size, int page, String sortBy, String direction) {
+         Sort sort = direction.equals("desc") ? Sort.by(sortBy).descending() : Sort.by(sortBy).ascending();
+        var pageable = PageRequest.of(page, size, sort);
+        return userRepo.findByNameContaining(nameKeyword,pageable);
+    }
+
+    @Override
+    public Page<User> searchByEmail(String emailKeyword, int size, int page, String sortBy, String direction) {
+        Sort sort = direction.equals("desc") ? Sort.by(sortBy).descending() : Sort.by(sortBy).ascending();
+        var pageable = PageRequest.of(page, size, sort);
+        return userRepo.findByEmailContaining(emailKeyword,pageable);
+    }
+
+    @Override
+    public Page<User> searchByPhone(String phoneKeyword, int size, int page, String sortBy, String direction) {
+        Sort sort = direction.equals("desc") ? Sort.by(sortBy).descending() : Sort.by(sortBy).ascending();
+        var pageable = PageRequest.of(page, size, sort);
+        return userRepo.findByPhoneNumberContaining(phoneKeyword,pageable);
+    }
+
+    @Override
     public boolean isUserExistByEmail(String email) {
         User user = userRepo.findByEmail(email).orElse(null);
         return user != null ? true : false;
     }
 
     @Override
-    public List<User> getAllUsers() {
-        return userRepo.findAll();
+    public Page<User> getAllUsers(int size,int page,String sortBy,String direction) {
+        Sort sort = direction.equals("desc") ? Sort.by(sortBy).descending() : Sort.by(sortBy).ascending();
+        var pageable = PageRequest.of(page, size, sort);
+        return userRepo.findAll(pageable);
     }
 
 
