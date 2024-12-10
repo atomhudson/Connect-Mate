@@ -12,5 +12,11 @@
   "license": "ISC",
   "devDependencies": {
     "tailwindcss": "^3.4.15"
+  },
+  "dependencies": {
+    "apexcharts": "^4.2.0",
+    "flowbite": "^2.5.2",
+    "gulp": "^5.0.0",
+    "quill": "^2.0.3"
   }
 }

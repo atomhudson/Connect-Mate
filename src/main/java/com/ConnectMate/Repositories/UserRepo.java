@@ -1,5 +1,6 @@
 package com.ConnectMate.Repositories;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
@@ -14,6 +15,11 @@ public interface UserRepo extends JpaRepository<User, String> {
 
 //    Page<User> getAllUsers(Pageable pageable);
 //    Optional<User> getAllUsers();
+
+    List<User> findAll();
+    List<User> findAllByEmailVerified(boolean emailVerified);
+    List<User> findAllByEnabled(boolean isEnabled);
+
 
     Page<User> findAll(Pageable pageable);
     Page<User> findByNameContaining(String name,Pageable pageable);

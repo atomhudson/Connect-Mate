@@ -18,6 +18,14 @@ class ApplicationTests {
 		System.out.println("Email sending");
 		emailService.sendEmail("test@Gmail.com", "Email from ConnectMate Application", "Test");
 	}
+
+	@Test
+	void sendEmailTest2() {
+		String[] emails = {"test1@Gmail.com","test2@Gmail.com"};
+		String htmlBody = "<html><body><h1>This is a test email</h1></body></html>";
+		String subject = "HTML Body";
+		emailService.sendEmailWithHTML(emails,subject,htmlBody);
+	}
 //
 //	@Autowired
 //	private EmailService service;

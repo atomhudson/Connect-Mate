@@ -320,14 +320,14 @@
 <script data-th-src="@{'/js/contacts.js'}"></script>
 <script data-th-src="@{'/js/users.js'}"></script>
 <script>
-    // function exportData() {
-    //     TableToExcel.convert(document.getElementById("contact-table"), {
-    //         name: "contacts.xlsx",
-    //         sheet: {
-    //             name: "Sheet 1",
-    //         },
-    //     });
-    // }
+    function exportData() {
+        TableToExcel.convert(document.getElementById("contact-table"), {
+            name: "users.xlsx",
+            sheet: {
+                name: "Sheet 1",
+            },
+        });
+    }
 </script>
 </body>
 </html>

@@ -153,6 +153,21 @@ public class UserServiceImplementation implements UserService {
     }
 
     @Override
+    public List<User> getUsers() {
+        return userRepo.findAll();
+    }
+
+    @Override
+    public List<User> verifiedEmail(boolean isEmailVerified) {
+        return userRepo.findAllByEmailVerified(isEmailVerified);
+    }
+
+    @Override
+    public List<User> enabledUser(boolean isEnabled) {
+        return userRepo.findAllByEnabled(isEnabled);
+    }
+
+    @Override
     public boolean isUserExistByEmail(String email) {
         User user = userRepo.findByEmail(email).orElse(null);
         return user != null ? true : false;

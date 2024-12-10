@@ -36,4 +36,8 @@ public interface UserService {
     Page<User> searchByName(String nameKeyword,int size, int page, String sortBy, String direction);
     Page<User> searchByEmail(String emailKeyword,int size, int page, String sortBy, String direction);
     Page<User> searchByPhone(String phoneKeyword,int size, int page, String sortBy, String direction);
+
+    List<User> getUsers();
+    List<User> verifiedEmail(boolean isEmailVerified);
+    List<User> enabledUser(boolean isEnabled);
 }

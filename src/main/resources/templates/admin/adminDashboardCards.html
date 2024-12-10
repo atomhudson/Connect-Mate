@@ -1,0 +1,53 @@
+<div th:fragment="cardSection" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 w-full min-w-0">
+  <!-- Card Template -->
+  <div class="flex flex-col px-6 py-4 bg-white dark:bg-gray-800 shadow-lg rounded-lg overflow-hidden relative">
+    <i class="fa-solid fa-people-group absolute top-2 right-2 text-2xl text-gray-500 dark:text-gray-300" style="color: blue;"></i>
+    <div class="flex flex-col items-center space-y-4">
+      <div class="text-6xl font-bold tracking-tight leading-none text-blue-500 dark:text-blue-400">
+        <span th:text="${usersCount}"></span>
+      </div>
+      <div class="text-lg font-medium text-gray-700 dark:text-gray-300">Total Users</div>
+    </div>
+  </div>
+  <!-- Repeat for other cards -->
+  <div class="flex flex-col px-6 py-4 bg-white dark:bg-gray-800 shadow-lg rounded-lg overflow-hidden relative">
+    <i class="fa-solid fa-circle-check absolute top-2 right-2 text-2xl text-gray-500 dark:text-gray-300"style="color: green;"></i>
+    <div class="flex flex-col items-center space-y-4">
+      <div class="text-6xl font-bold tracking-tight leading-none text-green-500 dark:text-green-400">
+        <span th:text="${verifiedUser}"></span>
+      </div>
+      <div class="text-lg font-medium text-gray-700 dark:text-gray-300">Verified Users</div>
+    </div>
+  </div>
+  <div class="flex flex-col px-6 py-4 bg-white dark:bg-gray-800 shadow-lg rounded-lg overflow-hidden relative">
+    <i class="fa-solid fa-circle-xmark absolute top-2 right-2 text-2xl text-gray-500 dark:text-gray-300"style="color: red;"></i>
+    <div class="flex flex-col items-center space-y-4">
+      <div class="text-6xl font-bold tracking-tight leading-none text-red-500 dark:text-red-400">
+        <span th:text="${nonVerifiedUser}"></span>
+      </div>
+      <div class="text-lg font-medium text-gray-700 dark:text-gray-300">Non-Verified Users
+      </div>
+    </div>
+  </div>
+  <div class="flex flex-col px-6 py-4 bg-white dark:bg-gray-800 shadow-lg rounded-lg overflow-hidden relative">
+    <i class="fa-solid fa-person-circle-check absolute top-2 right-2 text-2xl text-gray-500 dark:text-gray-300"style="color: purple;"></i>
+    <div class="flex flex-col items-center space-y-4">
+      <div class="text-6xl font-bold tracking-tight leading-none text-purple-500 dark:text-purple-400">
+        <span th:text="${enabledUsers}"></span>
+      </div>
+      <div class="text-lg font-medium text-gray-700 dark:text-gray-300">Total Enabled Users
+      </div>
+    </div>
+  </div>
+  <div class="flex flex-col px-6 py-4 bg-white dark:bg-gray-800 shadow-lg rounded-lg overflow-hidden relative">
+    <i class="fa-solid fa-person-circle-xmark absolute top-2 right-2 text-2xl text-gray-500 dark:text-gray-300"style="color: yellow;"></i>
+    <div class="flex flex-col items-center space-y-4">
+      <div class="text-6xl font-bold tracking-tight leading-none text-yellow-500 dark:text-yellow-400">
+        <span th:text="${nonEnabledUsers}"></span>
+      </div>
+      <div class="text-lg font-medium text-gray-700 dark:text-gray-300">Total Non-Enabled
+        Users
+      </div>
+    </div>
+  </div>
+</div>
