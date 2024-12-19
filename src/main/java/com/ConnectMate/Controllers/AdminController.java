@@ -1,26 +1,22 @@
 package com.ConnectMate.Controllers;
 
-
-import com.ConnectMate.Entities.Contact;
+import com.ConnectMate.Entities.Query;
 import com.ConnectMate.Entities.User;
-import com.ConnectMate.Forms.ContactSearchForm;
 import com.ConnectMate.Forms.EmailForm;
 import com.ConnectMate.Forms.UserSearchForm;
 import com.ConnectMate.Helpers.AppConstants;
-import com.ConnectMate.Helpers.Helper;
 import com.ConnectMate.Helpers.Message;
 import com.ConnectMate.Helpers.MessageType;
 import com.ConnectMate.Repositories.UserRepo;
 import com.ConnectMate.Services.EmailService;
+import com.ConnectMate.Services.QueryService;
 import com.ConnectMate.Services.UserService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.data.domain.Page;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -29,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -40,31 +37,42 @@ public class AdminController {
     Logger logger = LoggerFactory.getLogger(AdminController.class);
 
     @Autowired
-    private UserRepo userRepo;
-
-    @Autowired
     private UserService userService;
 
     @Autowired
     private EmailService emailService;
 
+    @Autowired
+    private QueryService queryService;
+
     @RequestMapping(value = "/dashboard")
     public String adminDashboard(Model model) {
         System.out.println("Admin Dashboard");
         int usersCount = userService.getUsers().size();
-        int verifiedUser = userService.verifiedEmail(true).size();
-        int nonVerifiedUser = userService.verifiedEmail(false).size();
         int enabledUsers = userService.enabledUser(true).size();
         int nonEnabledUsers = userService.enabledUser(false).size();
+        int verifiedUser = userService.verifiedEmail(true).size();
+        int nonVerifiedUser = userService.verifiedEmail(false).size();
+        int resolvedQueries = queryService.queryResolvedOrNot(true).size();
+        int notResolvedQueries = queryService.queryResolvedOrNot(false).size();
+
+        List<Query> queries = queryService.findAll();
 
         model.addAttribute("usersCount", usersCount);
-        model.addAttribute("verifiedUser", verifiedUser);
-        model.addAttribute("nonVerifiedUser", nonVerifiedUser);
         model.addAttribute("enabledUsers", enabledUsers);
+        model.addAttribute("verifiedUser", verifiedUser);
         model.addAttribute("nonEnabledUsers", nonEnabledUsers);
+        model.addAttribute("resolvedQueries", resolvedQueries);
+        model.addAttribute("nonVerifiedUser", nonVerifiedUser);
+        model.addAttribute("notResolvedQueries", notResolvedQueries);
+
+        model.addAttribute("queries", queries);
+
+
         // Log the gathered statistics
-        logger.info("Admin Dashboard Stats: Total Users = {}, Verified Users = {}, Non-Verified Users = {}, Enabled Users = {}, Non-Enabled Users = {}",
-                usersCount, verifiedUser, nonVerifiedUser, enabledUsers, nonEnabledUsers);
+        logger.info("Admin Dashboard Stats: Total Users = {}, Verified Users = {}, Non-Verified Users = {}, Enabled Users = {}, Non-Enabled Users = {}, Resolved Queries = {}, Not Resolved Queries = {}",
+                usersCount, verifiedUser, nonVerifiedUser, enabledUsers, nonEnabledUsers, resolvedQueries, notResolvedQueries);
+
 
         return "admin/adminDashboard";
     }
@@ -184,5 +192,9 @@ public class AdminController {
             }
         }
         return "redirect:/admin/sendEmail";
+    }
+    @RequestMapping(value = "/view")
+    public String view(Model model) {
+        return "admin/queryDescription";
     }
 }

@@ -50,7 +50,7 @@ public class UserServiceImplementation implements UserService {
         String emailToken = UUID.randomUUID().toString();
         user.setEmailToken(emailToken);
         User savedUser = userRepo.save(user);
-        String emailLink = helper.getLinkForEmailVerificatiton(emailToken);
+        String emailLink = helper.getLinkForEmailVerification(emailToken);
         emailService.sendEmail(savedUser.getEmail(), "Verify Account : Smart  Contact Manager", emailLink);
         return savedUser;
     }

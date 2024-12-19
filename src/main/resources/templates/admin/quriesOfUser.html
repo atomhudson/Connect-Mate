@@ -1,0 +1,53 @@
+<div th:fragment="queries" class="dark:bg-gray-900 row-span-3 bg-white shadow rounded-lg">
+    <div class="flex items-center justify-between px-6 py-5 font-semibold">
+        <span>Queries of User</span>
+    </div>
+    <div class="overflow-y-auto" style="max-height: 24rem;">
+        <table class="table-auto w-full">
+            <thead>
+            <tr class="bg-gray-100 dark:bg-gray-800">
+                <th class="p-4 text-left">Query ID</th>
+                <th class="p-4 text-left">User</th>
+                <th class="p-4 text-left">Title</th>
+                <th class="p-4 text-left">Date</th>
+                <th class="p-4 text-left">Status</th>
+                <th class="p-4 text-left">Description</th>
+                <th class="p-4 text-left">Operations</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="query : ${queries}">
+                <td class="p-4 text-left" th:text="${query.id}"></td>
+                <td class="p-4 flex items-center">
+                    <div class="h-10 w-10 bg-gray-100 rounded-full overflow-hidden mr-3">
+                        <img th:src="${query.user.getProfilePic()}" alt="User profile picture">
+                    </div>
+                    <span class="text-gray-600" th:text="${query.user.getName()}"></span>
+                </td>
+                <td class="p-4 text-left" th:text="${query.title}"></td>
+                <td class="p-4 text-left" th:text="${#dates.format(query.date, 'dd-MM-yyyy')}"></td>
+                <td class="p-4 text-left">
+                    <span th:if="${query.isResolved}"
+                          class="inline-flex items-center bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">
+                        <span class="w-2 h-2 me-1 bg-green-500 rounded-full"></span>
+                            Resolved
+                    </span>
+                    <span th:if="${!query.isResolved}"
+                          class="inline-flex items-center bg-red-100 text-red-800 text-xs font-medium px-2.5 py-0.5 rounded-full dark:bg-red-900 dark:text-red-300">
+                        <i class="fa-solid fa-bug fa-beat" style="color: #ff0000;"></i>
+                        Not Resolved
+                    </span>
+
+                </td>
+                <td class="p-4 text-left">
+                    <button
+                            th:onclick="openDescription([[${query.id}]])"
+                            type="button" class="text-white bg-green-500 hover:bg-green-600 rounded-lg text-sm px-5 py-2.5">
+                        Open Description
+                    </button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

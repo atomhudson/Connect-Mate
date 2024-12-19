@@ -6,6 +6,8 @@ import com.ConnectMate.Services.QueryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class QueryServiceImplementation implements QueryService {
     private final QueryRepo queryRepo;
@@ -18,4 +20,21 @@ public class QueryServiceImplementation implements QueryService {
     public Query save(Query query) {
         return queryRepo.save(query);
     }
+
+    @Override
+    public List<Query> findAll() {
+        return queryRepo.findAll();
+    }
+
+    @Override
+    public List<Query> queryResolvedOrNot(boolean isResolved) {
+        return queryRepo.findByIsResolved(isResolved);
+    }
+
+    @Override
+    public Query findById(String id) {
+        return queryRepo.findById(id);
+    }
+
+
 }

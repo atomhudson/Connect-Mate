@@ -43,9 +43,7 @@ public class Helper {
         }
     }
 
-    public String getLinkForEmailVerificatiton(String emailToken) {
-
+    public String getLinkForEmailVerification(String emailToken) {
         return this.baseUrl + "/auth/verify-email?token=" + emailToken;
-
     }
 }
