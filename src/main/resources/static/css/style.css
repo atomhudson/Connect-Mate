@@ -270,13 +270,15 @@ span.flatpickr-weekday,
   background-repeat: no-repeat;
   background-size: 20px;
 }
-.custom-input-date-1::-webkit-calendar-picker-indicator {
-  background-image: url(../images/icon/icon-calendar.svg);
-}
-.custom-input-date-2::-webkit-calendar-picker-indicator {
-  background-image: url(../images/icon/icon-arrow-down.svg);
-}
 
 [x-cloak] {
   display: none !important;
 }
+
+/*#one {*/
+/*  min-height:100vh;*/
+/*  background-image: linear-gradient(75deg, rgb(6 6 6 / 64%) 8%, transparent),*/
+/*  url("");*/
+/*  background-position: center;*/
+/*  background-size: cover;*/
+/*}*/

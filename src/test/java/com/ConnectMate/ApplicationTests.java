@@ -26,6 +26,7 @@ class ApplicationTests {
 		String subject = "HTML Body";
 		emailService.sendEmailWithHTML(emails,subject,htmlBody);
 	}
+
 //
 //	@Autowired
 //	private EmailService service;

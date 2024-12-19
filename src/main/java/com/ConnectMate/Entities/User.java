@@ -70,6 +70,9 @@ public class User implements UserDetails {
 
     private Date lastUpdated;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL,fetch = FetchType.LAZY,orphanRemoval = true)
+    private List<Query> query;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         // list of roles[USER,ADMIN]

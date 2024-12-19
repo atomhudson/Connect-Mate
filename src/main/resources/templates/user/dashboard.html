@@ -1,32 +1,53 @@
 <!DOCTYPE html>
-<html
-  lang="en"
-  th:replace="~{base :: parent(~{::#content},~{::title},~{::script})}"
->
-  <head>
-    <title data-th-text="${loggedInUser.name}+' |  Dashboard'">
-      Profile Page
-    </title>
-  </head>
-  <body>
-    <div id="content">
-      <div th:if="${loggedInUser}">
-        <div data-th-replace="~{user/sidebar :: sidebar}"></div>
-      </div>
-
-      <div class="sm:pl-64 pt-20" style="height: 1000px">
-        <div class="flex justify-center flex-col items-center">
-          <h1 class="text-5xl">Welcome to User Dashbaord page</h1>
-          <p>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit.
-            Consequatur, ratione!
-          </p>
-        </div>
-      </div>
+<html lang="en" th:replace="~{base :: parent(~{::#content}, ~{::title}, ~{::script})}">
+<head>
+    <title th:text="${loggedInUser.name} + ' | Dashboard'">Profile Page</title>
+    <link rel="stylesheet" th:href="@{'/css/userBoard.css'}">
+</head>
+<body>
+<div id="content">
+    <div th:if="${loggedInUser}">
+        <div th:replace="~{user/sidebar :: sidebar}"></div>
     </div>
 
-    <script>
-      console.log("this is profile page");
-    </script>
-  </body>
+    <div class="sm:pl-64 pt-20">
+        <main class="py-6 px-12 space-y-12 bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 min-h-screen w-full">
+            <div class="bg-gradient-to-r from-green-400 to-teal-500 py-8 px-6 text-white text-center rounded-lg shadow-lg mb-0">
+                <h1 class="text-5xl font-extrabold mb-4">Welcome to the User Dashboard</h1>
+                <p class="text-lg font-medium">
+                    Access all your account information and manage your settings with ease. Explore your personalized dashboard now!
+                </p>
+            </div>
+            <div id="one" class="bg-cover bg-center h-screen flex items-center justify-center mt-0" style="background-image: url('/images/image.svg');">
+                <div class="text-center bg-opacity-0 text-white rounded-lg py-12 px-6">
+                    <h1 class="text-shadow text-4xl sm:text-5xl font-extrabold mb-4 leading-tight dark:text-gray-900">
+                        Connect and Manage Your Contacts with <strong class="text-blue-500">Connect Mate!</strong>
+                    </h1>
+                    <h4 class="text-xl sm:text-2xl font-medium mb-6 text-gray-200">
+                        Easily store, organize, and access your important contacts anytime, anywhere!
+                    </h4>
+                    <div class="flex justify-center gap-6">
+                        <a
+                                th:href="@{'./contacts/add'}"
+                                class="w-btn btn bg-yellow-400 text-black font-semibold py-2 px-6 rounded-full hover:bg-yellow-500 transition duration-300 ease-in-out transform hover:scale-105">
+                            Add Contact
+                        </a>
+                        <a
+                                th:href="@{'./contacts'}"
+                                class="t-btn btn bg-teal-500 text-white font-semibold py-2 px-6 rounded-full hover:bg-teal-600 transition duration-300 ease-in-out transform hover:scale-105">
+                            All Your Contact
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+</div>
+
+<script th:src="@{'/js/userBoard.js'}"></script>
+<script>
+    console.log("This is the profile page");
+</script>
+</body>
 </html>

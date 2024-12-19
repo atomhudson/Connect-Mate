@@ -61,7 +61,8 @@ public class ContactController {
             session.setAttribute("message", Message.builder()
                     .content("Please correct the following errors")
                     .type(MessageType.red)
-                    .build());
+                    .build()
+            );
             return "user/add_contact";
         }
 
@@ -83,7 +84,6 @@ public class ContactController {
             String fileURL = imageService.uploadImage(contactForm.getContactImage(), filename);
             contact.setPicture(fileURL);
             contact.setCloudinaryImagePublicId(filename);
-
         }
         contactService.save(contact);
         System.out.println(contactForm);

@@ -42,7 +42,7 @@ public class Application  implements CommandLineRunner {
 		user.setLastUpdated(new Date());
 
 		userRepo.findByEmail("admin@gmail.com").ifPresentOrElse(user1 -> {},() -> {
-//			userRepo.save(user);
+			userRepo.save(user);
 			System.out.println("user created");
 		});
 	}

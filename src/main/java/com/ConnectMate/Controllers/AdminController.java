@@ -48,9 +48,6 @@ public class AdminController {
     @Autowired
     private EmailService emailService;
 
-    @Autowired
-    private MessageSource messageSource;
-
     @RequestMapping(value = "/dashboard")
     public String adminDashboard(Model model) {
         System.out.println("Admin Dashboard");

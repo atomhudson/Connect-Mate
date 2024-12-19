@@ -28,10 +28,17 @@ public class RootController {
         String username = Helper.getEmailOfLoggedInUser(authentication);
         logger.info("User logged in: {}", username);
         User user = userService.getUserByEmail(username);
+
+        if (user == null) {
+            logger.error("User not found with email: {}", username);
+            return; // or handle the error gracefully
+        }
+
         System.out.println(user.getName());
         System.out.println(user.getEmail());
         logger.info("User logged in ROLE: {}", user.getRoleList().toString());
-        if (user.isEnabled()){
+
+        if (user.isEnabled()) {
             model.addAttribute("loggedInUser", user);
         }
     }
