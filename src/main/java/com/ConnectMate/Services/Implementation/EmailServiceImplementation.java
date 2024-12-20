@@ -115,7 +115,6 @@ public class EmailServiceImplementation implements EmailService {
             throw new RuntimeException("Error sending email to " + to + ": " + e.getMessage(), e);
         }
     }
-
     @Override
     public void sendEmailWithHTML(String[] to, String subject, String htmlBody) {
         for (String recipient : to) {
@@ -204,7 +203,6 @@ public class EmailServiceImplementation implements EmailService {
             }
         }
     }
-
     @Override
     public void sendQuery(String to, String name, String queryId, String subject, String body, String image) {
         String emailMessage = "<!DOCTYPE html>\n" +
@@ -293,10 +291,191 @@ public class EmailServiceImplementation implements EmailService {
             messageHelper.setText(emailMessage, true);
             eMailSender.send(mimeMessage);
         } catch (MessagingException e) {
-            // Log the exception to help with debugging
             logger.info("Error sending email to " + to + ": " + e.getMessage());
             throw new RuntimeException("Error sending email to " + to + ": " + e.getMessage(), e);
         }
     }
+    @Override
+    public void queryResolved(String to, String name, String queryId, String subject, String body, String image) {
+        String emailTemplate =
+                "<!DOCTYPE html>\n" +
+                        "            <html lang=\"en\">\n" +
+                        "            <head>\n" +
+                        "                <meta charset=\"UTF-8\">\n" +
+                        "                <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n" +
+                        "                <title>Connect Mate - Admin Email</title>\n" +
+                        "                <style>\n" +
+                        "                    body {\n" +
+                        "                        font-family: Arial, sans-serif;\n" +
+                        "                        color: #333;\n" +
+                        "                        margin: 0;\n" +
+                        "                        padding: 0;\n" +
+                        "                        background-color: #f7f7f7;\n" +
+                        "                    }\n" +
+                        "                    .email-container {\n" +
+                        "                        width: 100%;\n" +
+                        "                        max-width: 600px;\n" +
+                        "                        margin: 0 auto;\n" +
+                        "                        background-color: #ffffff;\n" +
+                        "                        padding: 20px;\n" +
+                        "                        border-radius: 8px;\n" +
+                        "                        box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.1);\n" +
+                        "                        border: 1px solid #ddd;\n" +
+                        "                    }\n" +
+                        "                    .header {\n" +
+                        "                        background-color: #007BFF;\n" +
+                        "                        color: #fff;\n" +
+                        "                        text-align: center;\n" +
+                        "                        padding: 10px 0;\n" +
+                        "                        border-radius: 8px 8px 0 0;\n" +
+                        "                    }\n" +
+                        "                    .header h1 {\n" +
+                        "                        margin: 0;\n" +
+                        "                    }\n" +
+                        "                    .content {\n" +
+                        "                        padding: 20px;\n" +
+                        "                        line-height: 1.6;\n" +
+                        "                    }\n" +
+                        "                    .content img {\n" +
+                        "                        max-width: 100%;\n" +
+                        "                        border-radius: 8px;\n" +
+                        "                        margin-top: 20px;\n" +
+                        "                    }\n" +
+                        "                    .footer {\n" +
+                        "                        text-align: center;\n" +
+                        "                        padding: 10px;\n" +
+                        "                        font-size: 14px;\n" +
+                        "                        color: #888;\n" +
+                        "                    }\n" +
+                        "                    .footer a {\n" +
+                        "                        color: #007BFF;\n" +
+                        "                        text-decoration: none;\n" +
+                        "                    }\n" +
+                        "                </style>\n" +
+                        "            </head>\n" +
+                        "            <body>\n" +
+                        "                <div class=\"email-container\">\n" +
+                        "                    <div class=\"header\">\n" +
+                        "                        <h1>Connect Mate</h1>\n" +
+                        "                    </div>\n" +
+                        "                    <div class=\"content\">\n" +
+                        "                        <p>Hello "+name+",</p>\n" +
+                        "                        <p>We are pleased to inform you that your query has been <strong>successfully resolved!</strong> Your query details are as follows:</p>\n" +
+                        "                        <p><strong>"+body+"</strong></p>\n" +
+                        "                        <p>Your unique query ID is: <strong>"+queryId+"</strong></p>\n" +
+                        "                        <p>Below is a related image for your reference:</p>\n" +
+                        "                        <img src=\""+image+"\" alt=\"Related Image\">\n" +
+                        "                        <p>If you have any further questions or need assistance, feel free to reach out to us.</p>\n" +
+                        "                        <p>Thank you for being a part of Connect Mate!</p>\n" +
+                        "                    </div>\n" +
+                        "                    <div class=\"footer\">\n" +
+                        "                        <p>Connect Mate &copy; 2024</p>\n" +
+                        "                        <p><a href=\"[Privacy Policy Link]\">Privacy Policy</a> | <a href=\"[Unsubscribe Link]\">Unsubscribe</a></p>\n" +
+                        "                    </div>\n" +
+                        "                </div>\n" +
+                        "            </body>\n" +
+                        "            </html>";
 
+        try {
+            MimeMessage mimeMessage = eMailSender.createMimeMessage();
+            MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
+            messageHelper.setFrom(AppConstants.EMAIL_FROM);
+            messageHelper.setTo(to);
+            messageHelper.setSubject(subject);
+            messageHelper.setText(emailTemplate, true);
+            eMailSender.send(mimeMessage);
+        } catch (MessagingException e) {
+            logger.info("Error sending email to " + to + ": " + e.getMessage());
+            throw new RuntimeException("Error sending email to " + to + ": " + e.getMessage(), e);
+        }
+    }
+    @Override
+    public void queryDeleted(String to, String name, String queryId, String subject, String body, String image) {
+        String emailTemplate = "<!DOCTYPE html>\n" +
+                        "            <html lang=\"en\">\n" +
+                        "            <head>\n" +
+                        "                <meta charset=\"UTF-8\">\n" +
+                        "                <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n" +
+                        "                <title>Connect Mate - Admin Email</title>\n" +
+                        "                <style>\n" +
+                        "                    body {\n" +
+                        "                        font-family: Arial, sans-serif;\n" +
+                        "                        color: #333;\n" +
+                        "                        margin: 0;\n" +
+                        "                        padding: 0;\n" +
+                        "                        background-color: #f7f7f7;\n" +
+                        "                    }\n" +
+                        "                    .email-container {\n" +
+                        "                        width: 100%;\n" +
+                        "                        max-width: 600px;\n" +
+                        "                        margin: 0 auto;\n" +
+                        "                        background-color: #ffffff;\n" +
+                        "                        padding: 20px;\n" +
+                        "                        border-radius: 8px;\n" +
+                        "                        box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.1);\n" +
+                        "                        border: 1px solid #ddd;\n" +
+                        "                    }\n" +
+                        "                    .header {\n" +
+                        "                        background-color: #007BFF;\n" +
+                        "                        color: #fff;\n" +
+                        "                        text-align: center;\n" +
+                        "                        padding: 10px 0;\n" +
+                        "                        border-radius: 8px 8px 0 0;\n" +
+                        "                    }\n" +
+                        "                    .header h1 {\n" +
+                        "                        margin: 0;\n" +
+                        "                    }\n" +
+                        "                    .content {\n" +
+                        "                        padding: 20px;\n" +
+                        "                        line-height: 1.6;\n" +
+                        "                    }\n" +
+                        "                    .content img {\n" +
+                        "                        max-width: 100%;\n" +
+                        "                        border-radius: 8px;\n" +
+                        "                        margin-top: 20px;\n" +
+                        "                    }\n" +
+                        "                    .footer {\n" +
+                        "                        text-align: center;\n" +
+                        "                        padding: 10px;\n" +
+                        "                        font-size: 14px;\n" +
+                        "                        color: #888;\n" +
+                        "                    }\n" +
+                        "                    .footer a {\n" +
+                        "                        color: #007BFF;\n" +
+                        "                        text-decoration: none;\n" +
+                        "                    }\n" +
+                        "                </style>\n" +
+                        "            </head>\n" +
+                        "            <body>\n" +
+                        "                <div class=\"email-container\">\n" +
+                        "                    <div class=\"header\">\n" +
+                        "                        <h1>Connect Mate</h1>\n" +
+                        "                    </div>\n" +
+                        "                    <div class=\"content\">\n" +
+                        "                        <p>Hello "+name+",</p>\n" +
+                        "                        <p><strong>We regret to inform you that your query is no longer valid and has been permanently deleted from our system.</strong> The query ID <strong>"+queryId+"</strong> no longer exists in our records.</p>\n" +
+                        "                        <p>We apologize for any inconvenience this may have caused.</p>\n" +
+                        "                        <p>If you have any further questions or need assistance, feel free to reach out to us.</p>\n" +
+                        "                        <p>Thank you for being a part of Connect Mate!</p>\n" +
+                        "                    </div>\n" +
+                        "                    <div class=\"footer\">\n" +
+                        "                        <p>Connect Mate &copy; 2024</p>\n" +
+                        "                        <p><a href=\"[Privacy Policy Link]\">Privacy Policy</a> | <a href=\"[Unsubscribe Link]\">Unsubscribe</a></p>\n" +
+                        "                    </div>\n" +
+                        "                </div>\n" +
+                        "            </body>\n" +
+                        "            </html>";
+        try {
+            MimeMessage mimeMessage = eMailSender.createMimeMessage();
+            MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
+            messageHelper.setFrom(AppConstants.EMAIL_FROM);
+            messageHelper.setTo(to);
+            messageHelper.setSubject(subject);
+            messageHelper.setText(emailTemplate, true);
+            eMailSender.send(mimeMessage);
+        } catch (MessagingException e) {
+            logger.info("Error sending email to " + to + ": " + e.getMessage());
+            throw new RuntimeException("Error sending email to " + to + ": " + e.getMessage(), e);
+        }
+    }
 }

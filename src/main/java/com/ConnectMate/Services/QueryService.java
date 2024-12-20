@@ -9,4 +9,5 @@ public interface QueryService {
     List<Query> findAll();
     List<Query> queryResolvedOrNot(boolean isResolved);
     Query findById(String id);
+    void delete(String id);
 }

@@ -4,6 +4,7 @@
         th:replace="~{base :: parent(~{::#content},~{::title},~{::script})}"
 >
 <head>
+    <link rel="stylesheet" th:href="@{'/css/userBoard.css'}">
     <title data-th-text="${loggedInUser.name}+' |  Dashboard'">
         Profile Page
     </title>
@@ -94,6 +95,7 @@
                     <div th:insert="~{admin/adminDashboardCards.html :: cardSection}"></div>
                 </section>
             </div>
+
                 <div th:insert="~{admin/quriesOfUser.html :: queries}"></div>
             </main>
         </div>
@@ -101,9 +103,19 @@
     </div>
 </div>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/@linways/table-to-excel@1.0.4/dist/tableToExcel.min.js"></script>
 <script data-th-src="@{'/js/contacts.js'}"></script>
 <script>
     console.log("this is admin page");
+    function exportQueryData() {
+        TableToExcel.convert(document.getElementById("query-table"), {
+            name: "queries.xlsx",
+            sheet: {
+                name: "Sheet 1",
+            },
+        });
+    }
+</script>
 </script>
 </body>
 </html>

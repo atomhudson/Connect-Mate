@@ -1,5 +1,14 @@
 package com.ConnectMate.Controllers;
 
+import com.ConnectMate.Entities.Query;
+import com.ConnectMate.Forms.ContactForm;
+import com.ConnectMate.Forms.QueryForm;
+import com.ConnectMate.Helpers.Helper;
+import com.ConnectMate.Services.EmailService;
+import com.ConnectMate.Services.ImageService;
+import com.ConnectMate.Services.QueryService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,12 +29,27 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
 import java.util.Date;
+import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Controller
 public class PageController {
 
+    private Logger logger = LoggerFactory.getLogger(UserController.class);
+
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private ImageService imageService;
+
+    @Autowired
+    private QueryService userQueryService;
+
+    @Autowired
+    private EmailService emailService;
+
 
     @GetMapping("/")
     public String index() {
@@ -58,8 +82,9 @@ public class PageController {
     // contact page
 
     @GetMapping("/contact")
-    public String contact() {
-        return new String("contact");
+    public String contact(Model model) {
+        model.addAttribute("queryForm",new QueryForm());
+        return "contact";
     }
 
     // this is showing login page
@@ -104,5 +129,46 @@ public class PageController {
         Message message = Message.builder().content("Registration Successful").type(MessageType.green).build();
         session.setAttribute("message", message);
         return "redirect:/register";
+    }
+    @RequestMapping(value = "/queryCreation",method = RequestMethod.POST)
+    public String queryCreation(
+            @Valid @ModelAttribute QueryForm queryForm,
+            BindingResult result,
+            HttpSession session
+    ) {
+
+        Helper helper = new Helper();
+        logger.info("Processing Query");
+
+        if (result.hasErrors()) {
+            result.getAllErrors().forEach(error -> logger.error(error.toString()));
+            session.setAttribute("message", Message.builder()
+                    .content("Please correct the following errors")
+                    .type(MessageType.red)
+                    .build()
+            );
+            return "contact";
+        }
+        if (helper.isGmailAddress(queryForm.getName())) {
+            Query query = new Query();
+            String queryId = UUID.randomUUID().toString();
+            query.setId(queryId);
+            query.setName(queryForm.getName());
+            query.setTitle(queryForm.getTitle());
+            query.setContent(queryForm.getDescription());
+            query.setDate(new Date());
+            query.setResolved(false);
+            query = userQueryService.save(query);
+            emailService.sendQuery(queryForm.getName(), queryForm.getName(), queryId, queryForm.getTitle(), queryForm.getDescription(), "");
+            logger.info("Query: " + query.toString());
+            session.setAttribute("message", Message.builder()
+                    .content("Query Created SuccessFully with queryId: " + queryId)
+                    .type(MessageType.green)
+                    .build()
+            );
+
+            return "contact";
+        }
+        return "contact";
     }
 }

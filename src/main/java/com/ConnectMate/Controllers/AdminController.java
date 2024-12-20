@@ -3,6 +3,7 @@ package com.ConnectMate.Controllers;
 import com.ConnectMate.Entities.Query;
 import com.ConnectMate.Entities.User;
 import com.ConnectMate.Forms.EmailForm;
+import com.ConnectMate.Forms.QuerySearchForm;
 import com.ConnectMate.Forms.UserSearchForm;
 import com.ConnectMate.Helpers.AppConstants;
 import com.ConnectMate.Helpers.Message;
@@ -20,14 +21,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Controller
@@ -67,13 +66,10 @@ public class AdminController {
         model.addAttribute("notResolvedQueries", notResolvedQueries);
 
         model.addAttribute("queries", queries);
-
-
+        model.addAttribute("querySearchForm", new QuerySearchForm());
         // Log the gathered statistics
         logger.info("Admin Dashboard Stats: Total Users = {}, Verified Users = {}, Non-Verified Users = {}, Enabled Users = {}, Non-Enabled Users = {}, Resolved Queries = {}, Not Resolved Queries = {}",
                 usersCount, verifiedUser, nonVerifiedUser, enabledUsers, nonEnabledUsers, resolvedQueries, notResolvedQueries);
-
-
         return "admin/adminDashboard";
     }
 
@@ -195,6 +191,20 @@ public class AdminController {
     }
     @RequestMapping(value = "/view")
     public String view(Model model) {
+        return "admin/queryDescription";
+    }
+
+    @GetMapping("/queries")
+    public String getQueries(@RequestParam(required = false) String status, Model model) {
+        List<Query> queries;
+        if ("resolved".equalsIgnoreCase(status)) {
+            queries = queryService.queryResolvedOrNot(true);
+        } else if ("not-resolved".equalsIgnoreCase(status)) {
+            queries = queryService.queryResolvedOrNot(false);
+        } else {
+            queries = queryService.findAll();
+        }
+        model.addAttribute("queries", queries);
         return "admin/queryDescription";
     }
 }

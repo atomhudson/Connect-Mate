@@ -6,6 +6,9 @@ import org.springframework.security.oauth2.client.authentication.OAuth2Authentic
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Component;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 @Component
 public class Helper {
 
@@ -45,5 +48,12 @@ public class Helper {
 
     public String getLinkForEmailVerification(String emailToken) {
         return this.baseUrl + "/auth/verify-email?token=" + emailToken;
+    }
+
+    public boolean isGmailAddress(String str) {
+        String gmailRegex = "^[A-Za-z0-9._%+-]+@gmail\\.com$";
+        Pattern pattern = Pattern.compile(gmailRegex);
+        Matcher matcher = pattern.matcher(str);
+        return matcher.matches();
     }
 }

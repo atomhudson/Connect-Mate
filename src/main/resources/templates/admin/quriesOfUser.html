@@ -1,11 +1,44 @@
 <div th:fragment="queries" class="dark:bg-gray-900 row-span-3 bg-white shadow rounded-lg">
-    <div class="flex items-center justify-between px-6 py-5 font-semibold">
-        <span>Queries of User</span>
+    <div
+            class="flex items-center justify-between px-8 py-6 bg-gradient-to-r from-purple-500 to-indigo-500 rounded-lg shadow-lg font-semibold">
+        <span class="text-lg text-gray-900 dark:text-white tracking-wide">User Queries</span>
+        <div class="flex space-x-8">
+      <span
+              class="flex items-center text-sm font-medium text-gray-900 dark:text-white hover:text-blue-400 dark:hover:text-blue-400  transition duration-200 cursor-pointer">
+        <i class="fa-solid fa-reply fa-lg me-2" style="color: #a7c5eb;"></i>
+        <span>Reply</span>
+      </span>
+            <span
+                    class="flex items-center text-sm font-medium text-gray-900 dark:text-white hover:text-green-500 dark:hover:text-green-300 transition duration-200 cursor-pointer">
+        <i class="fa-solid fa-check-double fa-lg me-2" style="color: #76ff76;"></i>
+        <span>Mark Resolved</span>
+      </span>
+            <span
+                    class="flex items-center text-sm font-medium text-gray-900 dark:text-white hover:text-red-500 dark:hover:text-red-300 transition duration-200 cursor-pointer">
+        <i class="fa-solid fa-trash fa-lg me-2" style="color: #ff8686;"></i>
+        <span>Delete</span>
+      </span>
+            <button type="button" onclick="exportQueryData()" class="px-3 py-2 bg-green-800 text-white rounded">
+                Export
+            </button>
+            <div class="flex items-center space-x-4">
+                <label for="status-filter" class="text-sm font-medium text-gray-900 dark:text-white">Filter by
+                    Status:</label>
+                <select id="status-filter"
+                        class="p-2 rounded border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white">
+                    <option value="all">All</option>
+                    <option value="resolved">Resolved</option>
+                    <option value="not-resolved">Not Resolved</option>
+                </select>
+            </div>
+        </div>
     </div>
+
     <div class="overflow-y-auto" style="max-height: 24rem;">
-        <table class="table-auto w-full">
+        <table id="query-table" class="table-auto w-full">
             <thead>
             <tr class="bg-gray-100 dark:bg-gray-800">
+                <th class="p-4 text-left">S No.</th>
                 <th class="p-4 text-left">Query ID</th>
                 <th class="p-4 text-left">User</th>
                 <th class="p-4 text-left">Title</th>
@@ -16,35 +49,67 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:each="query : ${queries}">
+            <tr th:each="query, iterStat : ${queries}" data-id="${query.id}"
+                class="hover:bg-gray-100 dark:hover:bg-gray-700">
+                <td class="p-4 text-left" th:text="${iterStat.count}"></td>
                 <td class="p-4 text-left" th:text="${query.id}"></td>
                 <td class="p-4 flex items-center">
-                    <div class="h-10 w-10 bg-gray-100 rounded-full overflow-hidden mr-3">
-                        <img th:src="${query.user.getProfilePic()}" alt="User profile picture">
+                    <div class="flex items-center">
+                        <div class="h-10 w-10 bg-gray-100 rounded-full overflow-hidden mr-3">
+                            <div th:if="${query.user != null}">
+                                <img th:src="${query.user.getProfilePic()}" alt="User profile picture"
+                                     class="w-full h-full object-cover" />
+                            </div>
+                            <div th:if="${query.user == null}">
+                                <img src="https://flowbite.com/docs/images/logo.svg" alt="Default profile picture"
+                                     class="w-full h-full object-cover" />
+                            </div>
+                        </div>
+                        <!-- User name or default name -->
+                        <span class="text-gray-600 dark:text-white"
+                              th:text="${query.user != null ? query.user.getName() : query.name}"></span>
                     </div>
-                    <span class="text-gray-600" th:text="${query.user.getName()}"></span>
                 </td>
                 <td class="p-4 text-left" th:text="${query.title}"></td>
                 <td class="p-4 text-left" th:text="${#dates.format(query.date, 'dd-MM-yyyy')}"></td>
                 <td class="p-4 text-left">
-                    <span th:if="${query.isResolved}"
-                          class="inline-flex items-center bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">
-                        <span class="w-2 h-2 me-1 bg-green-500 rounded-full"></span>
-                            Resolved
-                    </span>
+            <span th:if="${query.isResolved}"
+                  class="inline-flex items-center bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">
+              <span class="w-2 h-2 me-1 bg-green-500 rounded-full"></span>
+              Resolved
+            </span>
                     <span th:if="${!query.isResolved}"
                           class="inline-flex items-center bg-red-100 text-red-800 text-xs font-medium px-2.5 py-0.5 rounded-full dark:bg-red-900 dark:text-red-300">
-                        <i class="fa-solid fa-bug fa-beat" style="color: #ff0000;"></i>
-                        Not Resolved
-                    </span>
-
+              <i class="fa-solid fa-bug fa-beat" style="color: #ff0000;"></i>
+              Not Resolved
+            </span>
                 </td>
                 <td class="p-4 text-left">
-                    <button
-                            th:onclick="openDescription([[${query.id}]])"
-                            type="button" class="text-white bg-green-500 hover:bg-green-600 rounded-lg text-sm px-5 py-2.5">
-                        Open Description
-                    </button>
+                    <div th:if="${query.user != null}">
+                        <button th:onclick="openDescription([[${query.id}]],[[${query.user.getEmail()}]])" type="button"
+                                class="text-white bg-green-500 hover:bg-green-600 rounded-lg text-sm px-5 py-2.5">
+                            Open Description
+                        </button>
+                    </div>
+                    <div th:if="${query.user == null}">
+                        <button th:onclick="openDescription([[${query.id}]])" type="button"
+                                class="text-white bg-green-500 hover:bg-green-600 rounded-lg text-sm px-5 py-2.5">
+                            Open Description
+                        </button>
+                    </div>
+                </td>
+                <td class="p-4 text-left">
+                    <div class="flex space-x-3">
+                        <button class="p-2 rounded hover:bg-gray-300">
+                            <i class="fa-solid fa-reply" style="color: #078fe4;"></i>
+                        </button>
+                        <button th:onclick="queryResolved([[${query.id}]])" class="p-2 rounded hover:bg-gray-300">
+                            <i class="fa-solid fa-check-double" style="color: #11ff00;"></i>
+                        </button>
+                        <button th:onclick="deleteQuery([[${query.id}]])" class="p-2 rounded hover:bg-gray-300">
+                            <i class="fa-solid fa-trash fa-shake" style="color: #ff0000;"></i>
+                        </button>
+                    </div>
                 </td>
             </tr>
             </tbody>

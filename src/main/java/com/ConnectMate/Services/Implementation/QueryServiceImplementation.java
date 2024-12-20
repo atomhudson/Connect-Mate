@@ -3,6 +3,7 @@ package com.ConnectMate.Services.Implementation;
 import com.ConnectMate.Entities.Query;
 import com.ConnectMate.Repositories.QueryRepo;
 import com.ConnectMate.Services.QueryService;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -36,5 +37,9 @@ public class QueryServiceImplementation implements QueryService {
         return queryRepo.findById(id);
     }
 
-
+    @Override
+    @Transactional
+    public void delete(String id) {
+        queryRepo.deleteById(id);
+    }
 }

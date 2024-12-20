@@ -282,3 +282,6 @@ span.flatpickr-weekday,
 /*  background-position: center;*/
 /*  background-size: cover;*/
 /*}*/
+.bold-row {
+  font-weight: bold;
+}

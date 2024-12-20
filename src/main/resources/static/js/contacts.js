@@ -198,35 +198,139 @@ async function deleteUser(email) {
   });
 }
 
-async function openDescription(id) {
+async function openDescription(id, userId) {
   console.log("Query Id: " + id);
-
+  console.log("User Id: " + userId);
   try {
     const queryData = await (await fetch(`${baseURL}/api/queries/${id}`)).json();
+    const userData = await (await fetch(`${baseURL}/api/userData/${userId}`)).json();
     console.log(queryData);
 
-    // Check if the fetched data is valid
+    // Validate fetched data
     if (!queryData || !queryData.id) {
       console.error("Invalid data for query", id);
       return;
     }
-    // Populate the modal with the fetched data
+
+    // Populate modal with the fetched data
     document.querySelector("#query_id").textContent = queryData.id;
     document.querySelector("#image_url").href = queryData.image;
     document.querySelector("#query_title").textContent = queryData.title || "No title available";
     document.querySelector("#query_description").textContent = queryData.content || "No description available";
     document.querySelector("#query_creator_name").textContent = queryData.name || "Unknown";
-    // document.querySelector("#query_creator_realName").textContent = queryData.user || "Unknown";
-    // document.querySelector("#query_creator_email").textContent = queryData.user || "Unknown";
+    document.querySelector("#query_creator_realName").textContent = userData.name || "Unknown";
+    document.querySelector("#query_creator_email").textContent = userData.email || "Unknown";
     document.querySelector("#query_created_date").textContent = new Date(queryData.date).toLocaleDateString() || "Unknown";
     document.querySelector("#query_status").textContent = queryData.resolved ? "Resolved" : "Not Resolved";
 
     const queryImage = document.querySelector("#query_image");
-    queryImage.src = queryData.image || 'default-image.jpg';
+    queryImage.src = queryData.image || 'https://flowbite.com/docs/images/logo.svg';
+    openQueryModal();
 
-    openQueryModal();  // Open the modal after populating it
+    const row = document.querySelector(`tr[data-id='${id}']`);
+    if (row) {
+      row.classList.toggle("font-bold");
+    }
   } catch (error) {
     console.error("Error fetching query data: ", error);
   }
 }
+async function openDescription(id) {
+  console.log("Query Id: " + id);
+
+  try {
+    const queryData = await (await fetch(`${baseURL}/api/queries/${id}`)).json();
+
+    // Validate fetched data
+    if (!queryData || !queryData.id) {
+      console.error("Invalid data for query", id);
+      return;
+    }
+
+    // Populate modal with the fetched data
+    document.querySelector("#query_id").textContent = queryData.id;
+    document.querySelector("#image_url").href = queryData.image;
+    document.querySelector("#query_title").textContent = queryData.title || "No title available";
+    document.querySelector("#query_description").textContent = queryData.content || "No description available";
+    document.querySelector("#query_creator_name").textContent = queryData.name || "Unknown";
+    document.querySelector("#query_creator_realName").textContent =  "Unknown";
+    document.querySelector("#query_creator_email").textContent = "Unknown";
+    document.querySelector("#query_created_date").textContent = new Date(queryData.date).toLocaleDateString() || "Unknown";
+    document.querySelector("#query_status").textContent = queryData.resolved ? "Resolved" : "Not Resolved";
+
+    const queryImage = document.querySelector("#query_image");
+    queryImage.src = queryData.image || 'https://flowbite.com/docs/images/logo.svg';
+    openQueryModal();
+
+    const row = document.querySelector(`tr[data-id='${id}']`);
+    if (row) {
+      row.classList.toggle("font-bold");
+    }
+  } catch (error) {
+    console.error("Error fetching query data: ", error);
+  }
+}
+
+async function queryResolved(id){
+  const title = `Are you sure you want to mark RESOLVED this query : ` + id;
+  Swal.fire({
+    title: title,
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonText: "Confirm",
+    customClass: {
+      actions: 'flex justify-center space-x-4',
+      confirmButton: 'custom-confirm-button',
+      cancelButton: 'custom-cancel-button'
+    },
+    buttonsStyling: false
+  }).then((result) => {
+    if (result.isConfirmed) {
+      const url = `${baseURL}/query/queryResolved/` + id;
+      window.location.replace(url);
+    }
+  });
+}
+
+async function deleteQuery(id){
+  const title = `Are you sure you want to delete this query : ` + id;
+  Swal.fire({
+    title: title,
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonText: "Confirm",
+    customClass: {
+      actions: 'flex justify-center space-x-4',
+      confirmButton: 'custom-confirm-button',
+      cancelButton: 'custom-cancel-button'
+    },
+    buttonsStyling: false
+  }).then((result) => {
+    if (result.isConfirmed) {
+      const url = `${baseURL}/query/queryDelete/` + id;
+      window.location.replace(url);
+    }
+  });
+}
+
+document.getElementById("status-filter").addEventListener("change", function () {
+  const selectedStatus = this.value;
+  const tableRows = document.querySelectorAll("#query-table tbody tr");
+
+  tableRows.forEach(row => {
+    const statusCell = row.querySelector("td:nth-child(6) span"); // Adjust the column index if needed
+    const isResolved = statusCell && statusCell.textContent.trim().toLowerCase() === "resolved";
+
+    if (selectedStatus === "all") {
+      row.style.display = ""; // Show all rows
+    } else if (selectedStatus === "resolved" && isResolved) {
+      row.style.display = ""; // Show only resolved rows
+    } else if (selectedStatus === "not-resolved" && !isResolved) {
+      row.style.display = ""; // Show only not resolved rows
+    } else {
+      row.style.display = "none"; // Hide rows not matching the filter
+    }
+  });
+});
+
 

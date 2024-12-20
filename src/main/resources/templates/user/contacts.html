@@ -14,8 +14,14 @@
 
       <div class="sm:pl-64 pt-20">
         <div class="">
-          <h1 class="text-5xl text-center">All Your Contacts</h1>
-          <p class="text-center">List of all contacts...</p>
+          <div class="bg-gradient-to-r from-purple-500 to-indigo-600 p-8 rounded-lg shadow-lg">
+            <h1 class="dark:text-white text-gray-900 text-5xl font-extrabold text-center mb-4 tracking-wide leading-tight">
+              All Your Contacts
+            </h1>
+            <p class="dark:text-white text-gray-900 text-lg text-center opacity-80 max-w-3xl mx-auto">
+              List of all contacts you have saved, organized in a beautiful, easy-to-read layout. Browse, manage, and stay connected with all your important people.
+            </p>
+          </div>
 
           <div class="contacts_container p-5">
             <div
@@ -23,7 +29,6 @@
             >
               <form
                 data-th-object="${contactSearchForm}"
-                action=""
                 data-th-action="@{'/user/contacts/search'}"
               >
                 <div
@@ -240,7 +245,6 @@
     <script data-th-src="@{'/js/contacts.js'}"></script>
     <script>
       function exportData() {
-
         TableToExcel.convert(document.getElementById("contact-table"), {
           name: "contacts.xlsx",
           sheet: {

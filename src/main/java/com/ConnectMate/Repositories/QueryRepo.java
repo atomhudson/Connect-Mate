@@ -11,4 +11,5 @@ public interface QueryRepo extends JpaRepository<Query, Integer> {
     List<Query> findAllBy();
     List<Query> findByIsResolved(boolean isResolved);
     Query findById(String id);
+    void deleteById(String id);
 }
