@@ -1,21 +1,14 @@
 package com.ConnectMate.Controllers;
 
 import com.ConnectMate.Entities.Query;
-import com.ConnectMate.Forms.QuerySearchForm;
 import com.ConnectMate.Services.EmailService;
 import com.ConnectMate.Services.QueryService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Controller
 @RequestMapping("/admin/query")
@@ -32,8 +25,12 @@ public class QueryController {
     public String queryResolved(@PathVariable String queryId){
         Query query = queryService.findById(queryId);
         query.setResolved(true);
-        logger.info("Query Id: "+queryId);
-        String to = query.getUser().getEmail();
+        String to;
+        if (query.getUser() != null){
+            to = query.getUser().getEmail();
+        }else{
+            to = query.getName();
+        }
         String creatorName = query.getName();
         String subject = query.getTitle();
         String body = query.getContent();
@@ -46,11 +43,11 @@ public class QueryController {
     public String queryDelete(@PathVariable String queryId){
         logger.info("Query deleted with id " + queryId);
         Query query = queryService.findById(queryId);
-        String to = query.getUser().getEmail();
-        String creatorName = query.getName();
-        String subject = query.getTitle();
-        String body = query.getContent();
-        emailService.queryDeleted(to,creatorName,queryId,subject,body,query.getImage());
+//        String to = query.getUser().getEmail();
+//        String creatorName = query.getName();
+//        String subject = query.getTitle();
+//        String body = query.getContent();
+//        emailService.queryDeleted(to,creatorName,queryId,subject,body,query.getImage());
         queryService.delete(queryId);
         return "redirect:/admin/dashboard";
     }

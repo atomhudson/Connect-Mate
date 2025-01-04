@@ -85,7 +85,6 @@ public class UserController {
             );
             return "user/contactUs";
         }
-
         String username = Helper.getEmailOfLoggedInUser(authentication);
         User user = userService.getUserByEmail(username);
         Query query = new Query();
@@ -104,12 +103,9 @@ public class UserController {
         query.setResolved(false);
         query.setUser(user);
 
-        // Saving query to the database
         query = userQueryService.save(query);
 
         emailService.sendQuery(username, queryForm.getName(), queryId, queryForm.getTitle(),queryForm.getDescription(), fileUrl);
-        logger.info("Query: " + query.toString());
-
         return "redirect:/user/contactUs";
     }
 

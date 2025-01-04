@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="modal" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center hidden z-50">
+        <div class="relative bg-white border border-gray-200 rounded-lg shadow-lg dark:border-gray-700 dark:bg-gray-800">
+          <!-- Close Button -->
+          <button onclick="closeModal()" class="absolute top-2 right-2 text-gray-400 hover:text-gray-900 dark:hover:text-white focus:outline-none">
+            <i class="fa-solid fa-xmark text-lg"></i>
+          </button>
+      
+          <div class="flex flex-col items-center md:flex-row md:max-w-xl">
+            <!-- Image -->
+            <img class="object-cover w-full rounded-t-lg h-96 md:h-auto md:w-48 md:rounded-none md:rounded-s-lg" 
+                 src="/docs/images/blog/image-4.jpg" 
+                 alt="Noteworthy technology acquisitions 2021">
+            <!-- Content -->
+            <div class="flex flex-col justify-between p-4 leading-normal">
+              <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+                Noteworthy technology acquisitions 2021
+              </h5>
+              <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">
+                Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div> 
+</body>
+</html>

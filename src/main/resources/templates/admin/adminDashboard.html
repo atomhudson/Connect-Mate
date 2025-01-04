@@ -106,7 +106,6 @@
 <script src="https://cdn.jsdelivr.net/npm/@linways/table-to-excel@1.0.4/dist/tableToExcel.min.js"></script>
 <script data-th-src="@{'/js/contacts.js'}"></script>
 <script>
-    console.log("this is admin page");
     function exportQueryData() {
         TableToExcel.convert(document.getElementById("query-table"), {
             name: "queries.xlsx",
@@ -115,7 +114,6 @@
             },
         });
     }
-</script>
 </script>
 </body>
 </html>

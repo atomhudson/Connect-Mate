@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error - [[${errorCode}]]</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen flex items-center justify-center bg-gradient-to-br from-red-50 to-red-100 dark:from-gray-800 dark:to-gray-900">
+<div class="text-center px-8 py-12 bg-white dark:bg-gray-900 shadow-lg rounded-2xl max-w-md">
+    <h1 class="text-6xl font-extrabold text-red-600 dark:text-red-400">Error [[${errorCode}]]</h1>
+    <h2 class="mt-4 text-2xl font-bold text-gray-800 dark:text-white">[[${errorMessage}]]</h2>
+    <p class="mt-2 text-gray-600 dark:text-gray-400">
+        Something went wrong. Please try again later.
+    </p>
+    <div class="mt-6">
+        <a href="/" class="px-6 py-3 bg-red-600 text-white rounded-lg font-medium hover:bg-red-700 dark:bg-red-500 dark:hover:bg-red-600 transition">
+            Go Back Home
+        </a>
+    </div>
+</div>
+</body>
+</html>

@@ -108,7 +108,9 @@ public class ContactController {
         String username = Helper.getEmailOfLoggedInUser(authentication);
         User user = userService.getUserByEmail(username);
 
+
         Page<Contact> pageContact = contactService.getByUser(user, page, size, sortBy, direction);
+
 
         model.addAttribute("pageContact", pageContact);
         model.addAttribute("pageSize", AppConstants.PAGE_SIZE);

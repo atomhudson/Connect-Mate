@@ -155,13 +155,15 @@
                           class="h-2.5 w-2.5 rounded-full bg-green-500 me-2"
                         ></div>
 
-                        <a data-th-href="@{*{websiteLink}}" target="_blank"
-                          ><i class="fa-solid w-6 h-6 fa-link"></i
-                        ></a>
+                        <a data-th-href="@{*{(websiteLink != null && !websiteLink.isEmpty() && !websiteLink.startsWith('http')) ? 'https://' + websiteLink : websiteLink}}" target="_blank">
+                          <i class="fa-solid w-6 h-6 fa-link"></i>
+                        </a>
 
-                        <a data-th-href="@{*{linkedInLink}}" target="_blank">
+                        <a data-th-href="@{*{(linkedInLink != null && !linkedInLink.isEmpty() && !linkedInLink.startsWith('http')) ? 'https://' + linkedInLink : linkedInLink}}" target="_blank">
                           <i class="fa-brands w-6 h-6 fa-linkedin"></i>
                         </a>
+
+
                       </div>
                     </td>
                     <td class="px-6 py-4">

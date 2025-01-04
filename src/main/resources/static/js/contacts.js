@@ -63,7 +63,7 @@ async function loadContactdata(id) {
     const data = await (await fetch(`${baseURL}/api/contacts/${id}`)).json();
     console.log(data);
     if (data.name){
-      console.log("loadContant data is null")
+      console.log("loadContact data is null")
     }
     document.querySelector("#contact_name").innerHTML = data.name;
     document.querySelector("#contact_email").innerHTML = data.email;
@@ -79,9 +79,18 @@ async function loadContactdata(id) {
       contactFavorite.innerHTML = "Not Favorite Contact";
     }
 
-    document.querySelector("#contact_website").href = data.websiteLink;
+    let websiteLink = data.websiteLink;
+    if (websiteLink && !websiteLink.startsWith('http')) {
+      websiteLink = 'https://' + websiteLink;
+    }
+    document.querySelector("#contact_website").href = websiteLink;
     document.querySelector("#contact_website").innerHTML = data.websiteLink;
-    document.querySelector("#contact_linkedIn").href = data.linkedInLink;
+    let linkedInLink = data.linkedInLink;
+    if (linkedInLink && !linkedInLink.startsWith('http')) {
+      linkedInLink = 'https://' + linkedInLink;
+    }
+    document.querySelector("#contact_linkedIn").href = linkedInLink;
+
     document.querySelector("#contact_linkedIn").innerHTML = data.linkedInLink;
     openContactModal();
   } catch (error) {
@@ -199,12 +208,11 @@ async function deleteUser(email) {
 }
 
 async function openDescription(id, userId) {
-  console.log("Query Id: " + id);
   console.log("User Id: " + userId);
+  console.log("Query Id: " + id);
   try {
     const queryData = await (await fetch(`${baseURL}/api/queries/${id}`)).json();
     const userData = await (await fetch(`${baseURL}/api/userData/${userId}`)).json();
-    console.log(queryData);
 
     // Validate fetched data
     if (!queryData || !queryData.id) {
@@ -235,12 +243,10 @@ async function openDescription(id, userId) {
     console.error("Error fetching query data: ", error);
   }
 }
-async function openDescription(id) {
+async function openDescription1(id) {
   console.log("Query Id: " + id);
-
   try {
     const queryData = await (await fetch(`${baseURL}/api/queries/${id}`)).json();
-
     // Validate fetched data
     if (!queryData || !queryData.id) {
       console.error("Invalid data for query", id);
@@ -253,7 +259,7 @@ async function openDescription(id) {
     document.querySelector("#query_title").textContent = queryData.title || "No title available";
     document.querySelector("#query_description").textContent = queryData.content || "No description available";
     document.querySelector("#query_creator_name").textContent = queryData.name || "Unknown";
-    document.querySelector("#query_creator_realName").textContent =  "Unknown";
+    document.querySelector("#query_creator_realName").textContent = "Unknown";
     document.querySelector("#query_creator_email").textContent = "Unknown";
     document.querySelector("#query_created_date").textContent = new Date(queryData.date).toLocaleDateString() || "Unknown";
     document.querySelector("#query_status").textContent = queryData.resolved ? "Resolved" : "Not Resolved";
@@ -286,7 +292,7 @@ async function queryResolved(id){
     buttonsStyling: false
   }).then((result) => {
     if (result.isConfirmed) {
-      const url = `${baseURL}/query/queryResolved/` + id;
+      const url = `${baseURL}/admin/query/queryResolved/` + id;
       window.location.replace(url);
     }
   });
@@ -307,7 +313,7 @@ async function deleteQuery(id){
     buttonsStyling: false
   }).then((result) => {
     if (result.isConfirmed) {
-      const url = `${baseURL}/query/queryDelete/` + id;
+      const url = `${baseURL}/admin/query/queryDelete/` + id;
       window.location.replace(url);
     }
   });

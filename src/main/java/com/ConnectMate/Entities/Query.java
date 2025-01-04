@@ -29,5 +29,4 @@ public class Query {
     @ManyToOne
     @JsonIgnore
     private User user;
-
 }

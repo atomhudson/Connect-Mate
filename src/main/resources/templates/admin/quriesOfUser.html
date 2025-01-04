@@ -86,15 +86,15 @@
                 </td>
                 <td class="p-4 text-left">
                     <div th:if="${query.user != null}">
-                        <button th:onclick="openDescription([[${query.id}]],[[${query.user.getEmail()}]])" type="button"
+                        <button th:onclick="openDescription([[${query.id}]],[[${query.user.email}]])" type="button"
                                 class="text-white bg-green-500 hover:bg-green-600 rounded-lg text-sm px-5 py-2.5">
-                            Open Description
+                            Open
                         </button>
                     </div>
                     <div th:if="${query.user == null}">
-                        <button th:onclick="openDescription([[${query.id}]])" type="button"
+                        <button th:onclick="openDescription1([[${query.id}]])" type="button"
                                 class="text-white bg-green-500 hover:bg-green-600 rounded-lg text-sm px-5 py-2.5">
-                            Open Description
+                            Open
                         </button>
                     </div>
                 </td>
