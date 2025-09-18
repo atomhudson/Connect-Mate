@@ -1,4 +1,4 @@
-console.log("admin user");
+console.log("AD.........!");
 
 document
   .querySelector("#image_file_input")

@@ -14,36 +14,36 @@ import java.util.List;
 import java.util.UUID;
 
 @SpringBootApplication
-public class Application  implements CommandLineRunner {
-//public class Application {
+//public class Application  implements CommandLineRunner {
+public class Application {
 	public static void main(String[] args) {
 		SpringApplication.run(Application.class, args);
 	}
-
-	@Autowired
-	private UserRepo userRepo;
-
-	@Autowired
-	private PasswordEncoder passwordEncoder;
-
-	@Override
-	public void run(String... args) throws Exception {
-		User user = new User();
-		user.setUserId(UUID.randomUUID().toString());
-		user.setName("admin");
-		user.setEmail("admin@gmail.com");
-		user.setPassword(passwordEncoder.encode("admin"));
-		user.setRoleList(List.of(AppConstants.ROLE_ADMIN));
-		user.setEmailVerified(true);
-		user.setEnabled(true);
-		user.setAbout("This is dummy user created initially");
-		user.setPhoneVerified(true);
-		user.setDate(new Date());
-		user.setLastUpdated(new Date());
-
-		userRepo.findByEmail("admin@gmail.com").ifPresentOrElse(user1 -> {},() -> {
-			userRepo.save(user);
-			System.out.println("user created");
-		});
-	}
+//
+//	@Autowired
+//	private UserRepo userRepo;
+//
+//	@Autowired
+//	private PasswordEncoder passwordEncoder;
+//
+//	@Override
+//	public void run(String... args) throws Exception {
+//		User user = new User();
+//		user.setUserId(UUID.randomUUID().toString());
+//		user.setName("admin");
+//		user.setEmail("admin@gmail.com");
+//		user.setPassword(passwordEncoder.encode("admin"));
+//		user.setRoleList(List.of(AppConstants.ROLE_ADMIN));
+//		user.setEmailVerified(true);
+//		user.setEnabled(true);
+//		user.setAbout("This is dummy user created initially");
+//		user.setPhoneVerified(true);
+//		user.setDate(new Date());
+//		user.setLastUpdated(new Date());
+//
+//		userRepo.findByEmail("admin@gmail.com").ifPresentOrElse(user1 -> {},() -> {
+//			userRepo.save(user);
+//			System.out.println("user created");
+//		});
+//	}
 }

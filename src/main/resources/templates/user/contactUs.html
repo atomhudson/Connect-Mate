@@ -50,15 +50,15 @@
                         </p>
 
 
-                        <div class="max-w-2xl mx-auto p-4 bg-white shadow-lg rounded-lg">
+                        <div class="max-w-2xl mx-auto p-4 bg-white shadow-lg rounded-lg dark:bg-gray-800 dark:text-white">
                             <form method="post" th:object="${queryForm}" th:action="@{'/user/processQuery'}"
                                   enctype="multipart/form-data">
 
                                 <!-- For Name -->
                                 <div class="mb-6">
-                                    <label for="name" class="block text-lg font-medium text-gray-800 mb-2">Name</label>
+                                    <label for="name" class="block text-lg font-medium text-gray-800 dark:text-gray-200 mb-2">Name</label>
                                     <input th:field="*{name}" type="text" id="name"
-                                           class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500"
+                                           class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md focus:outline-none focus:border-indigo-500"
                                            placeholder="Your Name">
                                     <p class="text-red-500 text-sm mt-1" th:if="${#fields.hasErrors('name')}">
                                         <span th:errors="*{name}"></span>
@@ -67,10 +67,9 @@
 
                                 <!-- For Title -->
                                 <div class="mb-6">
-                                    <label for="title"
-                                           class="block text-lg font-medium text-gray-800 mb-2">Title</label>
+                                    <label for="title" class="block text-lg font-medium text-gray-800 dark:text-gray-200 mb-2">Title</label>
                                     <input th:field="*{title}" type="text" id="title"
-                                           class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500"
+                                           class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md focus:outline-none focus:border-indigo-500"
                                            placeholder="Title of the Query">
                                     <p class="text-red-500 text-sm mt-1" th:if="${#fields.hasErrors('title')}">
                                         <span th:errors="*{title}">Invalid Title</span>
@@ -79,11 +78,10 @@
 
                                 <!-- For Description -->
                                 <div class="mb-6">
-                                    <label for="contents"
-                                           class="block text-lg font-medium text-gray-800 mb-2">Content</label>
+                                    <label for="contents" class="block text-lg font-medium text-gray-800 dark:text-gray-200 mb-2">Content</label>
                                     <textarea th:field="*{description}" id="contents"
                                               placeholder="Please describe your issue or question in detail to help us assist you better."
-                                              class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500"
+                                              class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md focus:outline-none focus:border-indigo-500"
                                               rows="6"></textarea>
                                     <p class="text-red-500 text-sm mt-1" th:if="${#fields.hasErrors('description')}">
                                         <span th:errors="*{description}">Description is Required</span>
@@ -92,12 +90,11 @@
 
                                 <!-- For Image -->
                                 <div class="mb-6">
-                                    <label for="image"
-                                           class="block text-lg font-medium text-gray-800 mb-2">Image</label>
-                                    <input th:field="*{image}" type="file" id="image" accept="image/*" class="w-full"
+                                    <label for="image" class="block text-lg font-medium text-gray-800 dark:text-gray-200 mb-2">Image</label>
+                                    <input th:field="*{image}" type="file" id="image" accept="image/*"
+                                           class="w-full text-gray-800 dark:text-gray-200 dark:bg-gray-700 dark:border-gray-600 rounded-md"
                                            onchange="previewImage(event)">
-                                    <img class="max-h-52 mx-auto rounded-lg shadow-md m-3" src=""
-                                         id="upload_image_preview"/>
+                                    <img class="max-h-52 mx-auto rounded-lg shadow-md m-3" src="" id="upload_image_preview"/>
                                     <p class="text-red-500 text-sm mt-1" th:if="${#fields.hasErrors('image')}">
                                         <span th:errors="*{image}">Correct Your Image</span>
                                     </p>
@@ -106,7 +103,7 @@
                                 <!-- Submit Button -->
                                 <div class="flex justify-end mt-6">
                                     <button type="submit"
-                                            class="px-6 py-3 bg-indigo-500 text-white font-semibold rounded-md hover:bg-indigo-600 focus:outline-none">
+                                            class="px-6 py-3 bg-indigo-500 text-white font-semibold rounded-md hover:bg-indigo-600 focus:outline-none dark:bg-indigo-600 dark:hover:bg-indigo-700">
                                         Submit
                                     </button>
                                 </div>

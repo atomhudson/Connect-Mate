@@ -1,4 +1,4 @@
-console.log("Script loaded");
+console.log("Scri........!");
 
 let currentTheme = getTheme();
 
@@ -14,7 +14,6 @@ function changeTheme() {
 
   changeThemeButton.addEventListener("click", (event) => {
     let oldTheme = currentTheme;
-    console.log("change theme button clicked");
     if (currentTheme === "dark") {
       //theme to light
       currentTheme = "light";
@@ -22,7 +21,6 @@ function changeTheme() {
       //theme to dark
       currentTheme = "dark";
     }
-    console.log(currentTheme);
     changePageTheme(currentTheme, oldTheme);
   });
 }

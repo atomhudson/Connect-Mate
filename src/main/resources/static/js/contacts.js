@@ -1,4 +1,4 @@
-console.log("Contacts.js");
+console.log("Con..............!");
 const baseURL = "http://localhost:8081";
 // const baseURL = "https://www.scm20.site";
 const viewContactModal = document.getElementById("view_contact_modal");
@@ -9,9 +9,6 @@ const options = {
   backdrop: "dynamic",
   backdropClasses: "bg-gray-900/50 dark:bg-gray-900/80 fixed inset-0 z-40",
   closable: true,
-  onHide: () => {
-    console.log("modal is hidden");
-  },
   onShow: () => {
     setTimeout(() => {
       if (contactModal) {
@@ -20,9 +17,6 @@ const options = {
         queryModal.classList.add("scale-100");
       }
     }, 50);
-  },
-  onToggle: () => {
-    console.log("modal has been toggled");
   },
 };
 
@@ -58,13 +52,8 @@ function closeQueryModel() {
 
 async function loadContactdata(id) {
   //function call to load data
-  console.log(id);
   try {
     const data = await (await fetch(`${baseURL}/api/contacts/${id}`)).json();
-    console.log(data);
-    if (data.name){
-      console.log("loadContact data is null")
-    }
     document.querySelector("#contact_name").innerHTML = data.name;
     document.querySelector("#contact_email").innerHTML = data.email;
     document.querySelector("#contact_image").src = data.picture;
@@ -94,7 +83,7 @@ async function loadContactdata(id) {
     document.querySelector("#contact_linkedIn").innerHTML = data.linkedInLink;
     openContactModal();
   } catch (error) {
-    console.log("Error: ", error);
+    console.warn("Error: ", error);
   }
 }
 
@@ -208,15 +197,13 @@ async function deleteUser(email) {
 }
 
 async function openDescription(id, userId) {
-  console.log("User Id: " + userId);
-  console.log("Query Id: " + id);
   try {
     const queryData = await (await fetch(`${baseURL}/api/queries/${id}`)).json();
     const userData = await (await fetch(`${baseURL}/api/userData/${userId}`)).json();
 
     // Validate fetched data
     if (!queryData || !queryData.id) {
-      console.error("Invalid data for query", id);
+      console.warn("Invalid data for query", id);
       return;
     }
 
@@ -240,16 +227,15 @@ async function openDescription(id, userId) {
       row.classList.toggle("font-bold");
     }
   } catch (error) {
-    console.error("Error fetching query data: ", error);
+    console.warn("Error fetching query data: ", error);
   }
 }
 async function openDescription1(id) {
-  console.log("Query Id: " + id);
   try {
     const queryData = await (await fetch(`${baseURL}/api/queries/${id}`)).json();
     // Validate fetched data
     if (!queryData || !queryData.id) {
-      console.error("Invalid data for query", id);
+      console.warn("Invalid data for query", id);
       return;
     }
 
@@ -273,7 +259,7 @@ async function openDescription1(id) {
       row.classList.toggle("font-bold");
     }
   } catch (error) {
-    console.error("Error fetching query data: ", error);
+    console.warn("Error fetching query data: ", error);
   }
 }
 
