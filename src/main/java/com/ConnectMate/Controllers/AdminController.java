@@ -8,7 +8,6 @@ import com.ConnectMate.Forms.UserSearchForm;
 import com.ConnectMate.Helpers.AppConstants;
 import com.ConnectMate.Helpers.Message;
 import com.ConnectMate.Helpers.MessageType;
-import com.ConnectMate.Repositories.UserRepo;
 import com.ConnectMate.Services.EmailService;
 import com.ConnectMate.Services.QueryService;
 import com.ConnectMate.Services.UserService;
@@ -23,10 +22,8 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 @Controller

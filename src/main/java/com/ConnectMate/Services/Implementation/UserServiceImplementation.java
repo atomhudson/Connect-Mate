@@ -34,11 +34,10 @@ public class UserServiceImplementation implements UserService {
     @Autowired
     private EmailService emailService;
 
-    private Logger logger = LoggerFactory.getLogger(this.getClass());
-
-
     @Autowired
     private  Helper helper;
+
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Override
     public User saveUser(User user) {
@@ -179,7 +178,6 @@ public class UserServiceImplementation implements UserService {
         var pageable = PageRequest.of(page, size, sort);
         return userRepo.findAll(pageable);
     }
-
 
     @Override
     public User getUserByEmail(String email) {

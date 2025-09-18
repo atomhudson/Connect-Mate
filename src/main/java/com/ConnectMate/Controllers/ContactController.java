@@ -108,9 +108,7 @@ public class ContactController {
         String username = Helper.getEmailOfLoggedInUser(authentication);
         User user = userService.getUserByEmail(username);
 
-
         Page<Contact> pageContact = contactService.getByUser(user, page, size, sortBy, direction);
-
 
         model.addAttribute("pageContact", pageContact);
         model.addAttribute("pageSize", AppConstants.PAGE_SIZE);
@@ -133,15 +131,13 @@ public class ContactController {
         var user = userService.getUserByEmail(Helper.getEmailOfLoggedInUser(authentication));
 
         Page<Contact> pageContact = null;
+
         if (contactSearchForm.getField().equalsIgnoreCase("name")) {
-            pageContact = contactService.searchByName(contactSearchForm.getValue(), size, page, sortBy, direction,
-                    user);
+            pageContact = contactService.searchByName(contactSearchForm.getValue(), size, page, sortBy, direction, user);
         } else if (contactSearchForm.getField().equalsIgnoreCase("email")) {
-            pageContact = contactService.searchByEmail(contactSearchForm.getValue(), size, page, sortBy, direction,
-                    user);
+            pageContact = contactService.searchByEmail(contactSearchForm.getValue(), size, page, sortBy, direction, user);
         } else if (contactSearchForm.getField().equalsIgnoreCase("phone")) {
-            pageContact = contactService.searchByPhoneNumber(contactSearchForm.getValue(), size, page, sortBy,
-                    direction, user);
+            pageContact = contactService.searchByPhoneNumber(contactSearchForm.getValue(), size, page, sortBy, direction, user);
         }
 
         logger.info("pageContact {}", pageContact);

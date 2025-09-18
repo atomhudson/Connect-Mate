@@ -30,8 +30,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 
 import java.util.Date;
 import java.util.UUID;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 @Controller
 public class PageController {
@@ -98,6 +96,7 @@ public class PageController {
     public String register(Model model) {
         UserForm userForm = new UserForm();
         model.addAttribute("userForm", userForm);
+
         return "register";
     }
 

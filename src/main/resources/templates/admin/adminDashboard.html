@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html
         lang="en"
+        xmlns:th="http://www.thymeleaf.org"
         th:replace="~{base :: parent(~{::#content},~{::title},~{::script})}"
 >
 <head>
@@ -95,7 +96,6 @@
                     <div th:insert="~{admin/adminDashboardCards.html :: cardSection}"></div>
                 </section>
             </div>
-
                 <div th:insert="~{admin/quriesOfUser.html :: queries}"></div>
             </main>
         </div>

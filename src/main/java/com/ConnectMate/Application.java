@@ -15,7 +15,7 @@ import java.util.UUID;
 
 @SpringBootApplication
 public class Application  implements CommandLineRunner {
-
+//public class Application {
 	public static void main(String[] args) {
 		SpringApplication.run(Application.class, args);
 	}
@@ -42,7 +42,7 @@ public class Application  implements CommandLineRunner {
 		user.setLastUpdated(new Date());
 
 		userRepo.findByEmail("admin@gmail.com").ifPresentOrElse(user1 -> {},() -> {
-//			userRepo.save(user);
+			userRepo.save(user);
 			System.out.println("user created");
 		});
 	}

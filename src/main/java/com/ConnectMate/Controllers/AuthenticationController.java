@@ -21,11 +21,8 @@ public class AuthenticationController {
     private UserRepo userRepo;
 
     @GetMapping("/verify-email")
-    public String verifyEmail(
-            @RequestParam("token") String token, HttpSession session) {
-
+    public String verifyEmail(@RequestParam("token") String token, HttpSession session) {
         User user = userRepo.findByEmailToken(token).orElse(null);
-
         if (user != null) {
             if (user.getEmailToken().equals(token)) {
                 user.setEmailVerified(true);
@@ -49,7 +46,6 @@ public class AuthenticationController {
                 .type(MessageType.red)
                 .content("Email not verified ! Token is not associated with user .")
                 .build());
-
         return "error_page";
     }
 
